@@ -1,0 +1,16 @@
+0000000000000000000000000000000000000000 8217ce2323277783ea60eddf1647ea91eec83fa1 Amit <amitpatil321@gmail.com> 1727110758 +0530	commit (initial): Initial commit from Create Next App
+8217ce2323277783ea60eddf1647ea91eec83fa1 bb2d21850579ccd104d8fa38ed7da2d041933466 Amit <amitpatil321@gmail.com> 1727122254 +0530	commit: feat: Initial commit - navbar complete
+bb2d21850579ccd104d8fa38ed7da2d041933466 488cbe030203d5971232ccc3704a9da1e9c90de7 Amit <amitpatil321@gmail.com> 1728491501 +0530	commit: feat: add prettier and prettier-tailwind plugin
+488cbe030203d5971232ccc3704a9da1e9c90de7 67078da9d656ad0791cf63258b71d164a7d50bc7 Amit <amitpatil321@gmail.com> 1728491551 +0530	commit: feat: add dark theme switcher
+67078da9d656ad0791cf63258b71d164a7d50bc7 c9ab8547917fdeafd9a2e565747ff1101950bc0f Amit <amitpatil321@gmail.com> 1728496404 +0530	commit: feat: navbar and sidebar complete with dark theme
+c9ab8547917fdeafd9a2e565747ff1101950bc0f 138075305686e17583148c767f6be10b7af2443d Amit <amitpatil321@gmail.com> 1728756136 +0530	commit: feat: add empty pages
+138075305686e17583148c767f6be10b7af2443d 70d73d79e642f1b56cbbab98704c21010de11f52 Amit <amitpatil321@gmail.com> 1728756567 +0530	commit: feat: add toast, clerk integration and other small changes
+70d73d79e642f1b56cbbab98704c21010de11f52 1e37d67977a6ec7c96e72c58700ee45b7ebca0d1 Amit <amitpatil321@gmail.com> 1728760143 +0530	commit: feat: right sidebar, home page ui changes and search component
+1e37d67977a6ec7c96e72c58700ee45b7ebca0d1 48b66a6e799d635fa7f31570bd79b4f705a3858d Amit <amitpatil321@gmail.com> 1739299698 +0530	commit: feat: update left and right sidebar styles for improved responsiveness
+48b66a6e799d635fa7f31570bd79b4f705a3858d 8ce8d07d04d84fced11cd43e183621793d0838f7 Amit <amitpatil321@gmail.com> 1739299779 +0530	commit: feat: add custom utility classes for light and dark themes
+8ce8d07d04d84fced11cd43e183621793d0838f7 babe1713be7658341cdd72f4ceb11602af4f4ea4 Amit <amitpatil321@gmail.com> 1739299825 +0530	commit (amend): feat: add custom utility classes for light and dark themes
+babe1713be7658341cdd72f4ceb11602af4f4ea4 16f322bf25565a2d69b3ede786e51dc9f47bd25d Amit <amitpatil321@gmail.com> 1739299879 +0530	commit: feat: add filter components and constants for home page
+16f322bf25565a2d69b3ede786e51dc9f47bd25d 40ab538e0cbda46a6f44e5b8340752466808c219 Amit <amitpatil321@gmail.com> 1739299918 +0530	commit: feat: implement mobile navigation and enhance layout styles for dark mode
+40ab538e0cbda46a6f44e5b8340752466808c219 7c33b21ce1f9b18a7b654aaf460ecf4aa9988d3b Amit <amitpatil321@gmail.com> 1739382612 +0530	commit: feat: add new components for rendering tags and metrics, and update paths for navigation
+7c33b21ce1f9b18a7b654aaf460ecf4aa9988d3b 17a44f387172551e0b5b4841e6b066ce4758f2ac Amit <amitpatil321@gmail.com> 1739382619 +0530	commit (amend): feat: add new components for rendering tags and metrics, and update paths for navigation
+17a44f387172551e0b5b4841e6b066ce4758f2ac e22a3cc8f41d5659e15fccf4d8d2d76fc5f9aacd Amit <amitpatil321@gmail.com> 1739390639 +0530	commit: feat: add validation schema and form components for asking questions

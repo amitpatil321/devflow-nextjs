@@ -2,9 +2,24 @@
 
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
+import User from "@/database/user.model";
+import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
+import { CreateQuestionProps, GetQuestionsProps } from "./shared.types";
 
-export async function createQuestion(params: any) {
+export async function getQuestions(params: GetQuestionsProps) {
+  try {
+    connectToDatabase();
+    return await Question.find({})
+      .populate({ path: "tags", model: Tag })
+      .populate({ path: "author", model: User });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function createQuestion(params: CreateQuestionProps) {
   try {
     connectToDatabase();
     const { title, content, tags, author, path } = params;
@@ -31,7 +46,9 @@ export async function createQuestion(params: any) {
 
     // Create
 
-    // Increase authors reputation for asking new question
+    // Increase authors reputation by +5 for asking new question
+
+    revalidatePath(path);
   } catch (error) {
     throw error;
   }

@@ -32,7 +32,7 @@ const Metric = ({
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
         <span
-          className={`small-regular line-clamp-1 ${isAuthor ? "max-sm: hidden" : ""}`}
+          className={`small-regular line-clamp-1 ${isAuthor ? "max-sm:hidden" : ""}`}
         >
           {title}
         </span>
@@ -48,7 +48,7 @@ const Metric = ({
     );
   }
 
-  return <div className="flex-center flex-wrap gap-1">{metricContent}</div>;
+  return <div className="flex-wrap flex-center gap-1">{metricContent}</div>;
 };
 
 export default Metric;

@@ -49,11 +49,11 @@ const QuestionCard = ({ question }: QuestionCardType) => {
       </div>
       <div className="flex-wrap flex-between gap-3 mt-6 w-full">
         <Metric
-          imgUrl={`https://randomuser.me/api/portraits/men/${author._id}.jpg`}
+          imgUrl={author?.picture}
           alt="user"
-          value={author.name}
+          value={author?.name}
           title={` - asked ${timeAgo(createdAt)}`}
-          href={`${paths.profile}/${author._id}`}
+          href={`${paths?.profile}/${author?._id}`}
           isAuthor
           textStyles="body-medium text-dark400_light800"
         />

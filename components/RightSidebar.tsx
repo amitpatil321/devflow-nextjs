@@ -2,7 +2,7 @@
 
 const LeftSidebar = () => {
   return (
-    <section className="light-border rigth-0 scrollbar dark: dark: sticky flex h-screen flex-col overflow-y-auto p-6 pt-32 dark:bg-dark-500 dark:text-white max-lg:hidden sm:w-[200px] lg:w-[350px]">
+    <section className="shadow-light-300 custom-scrollbar light-border background-light900_dark200 sticky right-0 top-0 flex h-screen w-[350px] flex-col overflow-y-auto border-l p-6 pt-36 dark:shadow-none max-xl:hidden">
       This is right sidebar
     </section>
   );

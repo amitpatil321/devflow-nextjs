@@ -1,14 +1,15 @@
 "use client";
 import { sidebarLinks } from "@/constants";
-import Link from "next/link";
+import { SignedOut } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import { Button } from "./ui/button";
 
 const LeftSidebar = () => {
   const pathname = usePathname();
   return (
-    <section className="light-border scrollbar dark: sticky left-0 flex h-screen flex-col overflow-y-auto p-6 pt-32 dark:bg-dark-500 max-sm:hidden sm:w-[100px] lg:w-[250px]">
+    <section className="shadow-light-300 custom-scrollbar light-border background-light900_dark200 sticky left-0 top-0 flex h-screen w-fit flex-col justify-between overflow-y-auto border-r p-6 pt-36 dark:shadow-none max-sm:hidden lg:w-[266px]">
       {sidebarLinks?.map((item) => {
         const isActive =
           (pathname.includes(item.route) && item.route.length > 1) ||
@@ -33,6 +34,40 @@ const LeftSidebar = () => {
           </Link>
         );
       })}
+
+      <div className="h-[300px]" />
+
+      <SignedOut>
+        <div className="flex flex-col gap-3">
+          <Link href="/sign-in">
+            <Button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none">
+              <Image
+                src="/assets/icons/account.svg"
+                alt="login"
+                width={20}
+                height={20}
+                className="invert-colors lg:hidden"
+              />
+              <span className="primary-text-gradient max-lg:hidden">
+                Log In
+              </span>
+            </Button>
+          </Link>
+
+          <Link href="/sign-up">
+            <Button className="light-border-2 text-dark400_light900 small-medium btn-tertiary min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
+              <Image
+                src="/assets/icons/sign-up.svg"
+                alt="sign up"
+                width={20}
+                height={20}
+                className="invert-colors lg:hidden"
+              />
+              <span className="max-lg:hidden">Sign up</span>
+            </Button>
+          </Link>
+        </div>
+      </SignedOut>
     </section>
   );
 };

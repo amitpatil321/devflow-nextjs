@@ -26,7 +26,7 @@ const Filters = ({
   placeholder,
 }: FiltersType) => {
   return (
-    <div className={`relative mt-4 ${containerClasses || ""}`}>
+    <div className={`relative ${containerClasses || ""}`}>
       <Select>
         <SelectTrigger
           className={`${otherClasses} body-regular light-border background-light800_dark300 text-darl500_light700 min-h-[54px] border px-5 py-2.5 sm:min-w-[180px]`}

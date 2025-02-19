@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 
   // Do something with payload
   // For this guide, log payload to console
-  const { id } = evt.data;
+  // const { id } = evt.data;
   const eventType = evt.type;
 
   if (eventType === "user.created") {
@@ -72,11 +72,12 @@ export async function POST(req: Request) {
       );
     } catch (error) {
       return NextResponse.json(
-        { message: "Internal server error" },
+        { message: `Internal server error : ${error}` },
         { status: 500 },
       );
     }
   }
+
   if (eventType === "user.updated") {
     const { id, first_name, last_name, username, email_addresses, image_url } =
       evt.data;
@@ -97,11 +98,12 @@ export async function POST(req: Request) {
       );
     } catch (error) {
       return NextResponse.json(
-        { message: "Internal server error" },
+        { message: `Internal server error: ${error}` },
         { status: 500 },
       );
     }
   }
+
   if (eventType === "user.deleted") {
     const { id } = evt.data;
     try {
@@ -115,7 +117,7 @@ export async function POST(req: Request) {
       );
     } catch (error) {
       return NextResponse.json(
-        { message: "Internal server error" },
+        { message: `Internal server error: ${error}` },
         { status: 500 },
       );
     }

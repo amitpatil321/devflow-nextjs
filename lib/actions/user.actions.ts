@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import paths from "@/constants/paths";
 import Question from "@/database/question.model";
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
@@ -47,16 +48,17 @@ export async function deleteUser(params: DeleteUserProps) {
     // we need to delete all the questions, answers, comments ets from our database
     const user = await User.findOne({ clerkId });
 
-    console.log(clerkId, user);
-
     if (!user) throw new Error("User not found!");
 
-    // // Delete all the questions related to this author
+    // Delete all the questions related to this author
     await Question.deleteMany({ author: user._id });
 
     const deletedUser = await User.findOneAndDelete({ clerkId });
 
-    if (deletedUser) revalidatePath(path);
+    if (deletedUser) {
+      revalidatePath(path);
+      revalidatePath(`${paths.home}`);
+    }
     return deletedUser;
   } catch (error) {
     console.log(error);

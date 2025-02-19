@@ -6,7 +6,7 @@ export default {
   collections: "/collections",
   jobs: "/jobs",
   tags: "/tags",
-  profile: "/tags",
+  profile: "/profile",
   askQuestion: "/ask-question",
   question: "/question",
 };

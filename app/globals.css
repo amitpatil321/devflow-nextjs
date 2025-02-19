@@ -25,9 +25,6 @@ body {
 }
 
 @layer utilities {
-  .shadow-light-100 {
-    @apply shadow-sm;
-  }
   .flex-center {
     @apply flex items-center justify-center;
   }

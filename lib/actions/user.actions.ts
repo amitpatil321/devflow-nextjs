@@ -13,6 +13,16 @@ import {
   UpdateUserProps,
 } from "./shared.types";
 
+export async function getAllUsers() {
+  try {
+    connectToDatabase();
+    return await User.find({ createdAt: -1 });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function createUser(userData: CreateUserProps) {
   try {
     connectToDatabase();

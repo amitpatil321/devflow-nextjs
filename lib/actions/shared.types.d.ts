@@ -43,3 +43,7 @@ export interface DeleteUserProps {
   clerkId: string;
   revalidatePath: string;
 }
+
+export interface TopInteractedTags {
+  userId: string;
+}

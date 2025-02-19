@@ -50,6 +50,7 @@ export async function createQuestion(params: CreateQuestionProps) {
 
     revalidatePath(path);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }

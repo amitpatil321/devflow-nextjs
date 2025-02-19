@@ -1,6 +1,7 @@
 export default {
   home: "/",
   signIn: "/sign-in",
+  signUp: "/sign-up",
   community: "/community",
   collections: "/collections",
   jobs: "/jobs",
@@ -8,5 +9,4 @@ export default {
   profile: "/tags",
   askQuestion: "/ask-question",
   question: "/question",
-  profile: "/profile",
 };

@@ -8,7 +8,7 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { getQuestions } from "@/lib/actions/question.action";
 import { HomePageFilters } from "../../../constants/filters";
-import pages from "../../../constants/paths";
+import { default as pages, default as paths } from "../../../constants/paths";
 
 const page = async () => {
   const questions = await getQuestions({});
@@ -18,7 +18,10 @@ const page = async () => {
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="text-dark100_light900 h1-bold">All Questions</h1>
 
-        <Link href="/ask-question" className="flex justify-end max-sm:w-full">
+        <Link
+          href={`${paths.askQuestion}`}
+          className="flex justify-end max-sm:w-full"
+        >
           <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
             Ask a Question
           </Button>
@@ -38,7 +41,7 @@ const page = async () => {
 
       <HomeFilters />
 
-      <div className="mt-6 flex w-full flex-col gap-6">
+      <section className="mt-6 flex w-full flex-col gap-6">
         {questions.length > 0 ? (
           questions.map((question) => (
             <QuestionCard key={question._id} question={question} />
@@ -53,7 +56,7 @@ const page = async () => {
             linkText="Ask a question"
           />
         )}
-      </div>
+      </section>
     </>
   );
 };

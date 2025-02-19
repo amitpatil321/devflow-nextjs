@@ -1,6 +1,7 @@
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 
+import paths from "@/constants/paths";
 import Link from "next/link";
 import GlobalSearch from "../search/GlobalSearch";
 import { MobileNav } from "./MobileNav";
@@ -10,7 +11,7 @@ const NavBar = () => {
   return (
     <nav className="shadow-light-300 fixed z-50 flex w-full items-center justify-between gap-5 bg-white p-6 shadow-lg dark:bg-dark-500">
       <Link
-        href="/"
+        href={`${paths.home}`}
         className="flex items-center justify-center gap-1"
         passHref
       >

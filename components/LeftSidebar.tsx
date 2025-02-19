@@ -1,5 +1,6 @@
 "use client";
 import { sidebarLinks } from "@/constants";
+import paths from "@/constants/paths";
 import { SignedOut } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,7 +40,7 @@ const LeftSidebar = () => {
 
       <SignedOut>
         <div className="flex flex-col gap-3">
-          <Link href="/sign-in">
+          <Link href={`${paths.signIn}`}>
             <Button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none">
               <Image
                 src="/assets/icons/account.svg"
@@ -54,7 +55,7 @@ const LeftSidebar = () => {
             </Button>
           </Link>
 
-          <Link href="/sign-up">
+          <Link href={`${paths.signUp}`}>
             <Button className="light-border-2 text-dark400_light900 small-medium btn-tertiary min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
               <Image
                 src="/assets/icons/sign-up.svg"

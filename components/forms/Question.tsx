@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import paths from "@/constants/paths";
+import { useTheme } from "@/context/ThemeProvider";
 import { createQuestion } from "@/lib/actions/question.action";
 import { askQuestionSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +30,7 @@ interface props {
 }
 
 const Question = ({ userId }: props) => {
+  const { theme } = useTheme();
   const editorRef = useRef<Editor | null>(null);
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
   const router = useRouter();
@@ -65,7 +67,11 @@ const Question = ({ userId }: props) => {
 
   const handleTagInput = (
     event: React.KeyboardEvent<HTMLInputElement>,
-    field: any,
+    field: {
+      name: string;
+      value: string[];
+      onChange: (value: string[]) => void;
+    },
   ) => {
     if (event.key === "Enter" && field.name === "tags") {
       event.preventDefault();
@@ -89,7 +95,7 @@ const Question = ({ userId }: props) => {
     }
   };
 
-  const handleRemoveTags = (tag: string, field: any) => {
+  const handleRemoveTags = (tag: string, field: { value: string[] }) => {
     form.setValue(
       "tags",
       field.value.filter((each: string) => each !== tag),
@@ -135,10 +141,10 @@ const Question = ({ userId }: props) => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Editor
+                  key={theme}
                   apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                   onInit={(_evt, editor) => {
-                    // @ts-ignore
-                    editorRef.current = editor;
+                    editorRef.current = editor as unknown as Editor;
                   }}
                   onEditorChange={(content) => {
                     field.onChange(content);
@@ -165,6 +171,8 @@ const Question = ({ userId }: props) => {
                       "codesample | bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist",
                     content_style: "body { font-family:Inter; font-size:18px }",
+                    skin: theme === "dark" ? "oxide-dark" : "oxide",
+                    content_css: theme === "dark" ? "dark" : "light",
                   }}
                   // {...field}
                 />
@@ -228,7 +236,7 @@ const RenderTags = ({
   handleRemoveTags,
 }: {
   field: { value: string[] };
-  handleRemoveTags: (tag: string, field: any) => void;
+  handleRemoveTags: (tag: string, field: { value: string[] }) => void;
 }) => {
   if (!Array.isArray(field.value) || field.value.length === 0) return null;
 

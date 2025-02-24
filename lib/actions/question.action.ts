@@ -5,7 +5,11 @@ import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
-import { CreateQuestionProps, GetQuestionsProps } from "./shared.types";
+import {
+  CreateQuestionProps,
+  GetQuestionDetailsProps,
+  GetQuestionsProps,
+} from "./shared.types";
 
 export async function getQuestions(params: GetQuestionsProps) {
   try {
@@ -49,6 +53,29 @@ export async function createQuestion(params: CreateQuestionProps) {
     // Increase authors reputation by +5 for asking new question
 
     revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getQuestionById(params: GetQuestionDetailsProps) {
+  try {
+    connectToDatabase();
+    const { questionId } = params;
+    const question = await Question.findById(questionId)
+      .populate({ path: "tags", model: Tag, select: "_id name" })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id clerkId name picture",
+      });
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    return question;
   } catch (error) {
     console.log(error);
     throw error;

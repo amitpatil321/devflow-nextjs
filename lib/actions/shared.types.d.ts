@@ -50,3 +50,9 @@ export interface TopInteractedTags {
 export interface GetQuestionDetailsProps {
   questionId: string;
 }
+export interface CreateAnswerProps {
+  authorId: string;
+  questionId: string;
+  content: string;
+  path: string;
+}

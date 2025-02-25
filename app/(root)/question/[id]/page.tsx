@@ -1,11 +1,17 @@
+import Image from "next/image";
+import Link from "next/link";
+
+import Answer from "@/components/forms/Answer";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import paths from "@/constants/paths";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.actions";
 import { formatNumber, timeAgo } from "@/lib/utils";
 import { TagProps } from "@/types";
-import Image from "next/image";
-import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: {
@@ -17,6 +23,10 @@ const page = async ({ params }: Props) => {
   const questionResponse = await getQuestionById({ questionId: params.id });
   const { _id, title, content, author, tags, answers, createdAt } =
     questionResponse;
+  const { userId } = await auth();
+  if (!userId) redirect(paths.signIn);
+  const loggedUser = await getUserById({ userId });
+
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -74,6 +84,14 @@ const page = async ({ params }: Props) => {
         {tags?.map((tag: TagProps) => (
           <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
         ))}
+      </div>
+
+      <div className="mt-8">
+        <Answer
+          question={content}
+          questionId={JSON.stringify(_id)}
+          authorId={JSON.stringify(loggedUser._id)}
+        />
       </div>
     </>
   );

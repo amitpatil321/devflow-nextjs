@@ -15,7 +15,13 @@ export const connectToDatabase = async () => {
       dbName: "devflow",
     });
     isConected = true;
-  } catch (error) {
-    console.error("Error connecting mongoDB", error);
+  } catch (error: any) {
+    if (error.message.includes("ENOTFOUND")) {
+      console.error("❌ Internet connection issue: Cannot reach MongoDB.");
+    } else if (error.message.includes("ECONNREFUSED")) {
+      console.error("❌ MongoDB server refused the connection.");
+    } else {
+      console.error("❌ Error connecting to MongoDB:", error);
+    }
   }
 };

@@ -1,20 +1,5 @@
 import { InferSchemaType, model, models, Schema } from "mongoose";
 
-// export interface IUser extends Document {
-//   clerkId: string;
-//   name: string;
-//   username: string;
-//   email: string;
-//   password: string;
-//   bio?: string;
-//   picture: string;
-//   location?: string;
-//   portfolioWebsite?: string;
-//   reputation?: string;
-//   saved: Schema.Types.ObjectId[];
-//   joinedAt: Date;
-// }
-
 const UserSchema = new Schema({
   clerkId: { type: String, required: true, unique: true },
   name: { type: String, required: true },

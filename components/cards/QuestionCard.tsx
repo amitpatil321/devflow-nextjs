@@ -19,7 +19,7 @@ interface QuestionCardType {
     };
     upvotes: number;
     views: number;
-    answers: number;
+    answers: string[];
     createdAt: Date;
   };
 }
@@ -29,25 +29,25 @@ const QuestionCard = ({ question }: QuestionCardType) => {
     question;
   console.log(createdAt);
   return (
-    <div className="p-9 sm:px-11 rounded-[10px] card-wrapper">
-      <div className="flex sm:flex-row flex-col-reverse justify-between items-start gap-5">
+    <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
+      <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
         <div>
-          <span className="sm:hidden flex text-dark400_light700 line-clamp-1 subtle-regular">
+          <span className="text-dark400_light700 subtle-regular line-clamp-1 flex sm:hidden">
             {timeAgo(createdAt)}
           </span>
           <Link href={`${paths.question}/${_id}`}>
-            <h3 className="flex-1 text-dark200_light900 line-clamp-1 sm:h3-semibold base-semibold">
+            <h3 className="text-dark200_light900 sm:h3-semibold base-semibold line-clamp-1 flex-1">
               {title}
             </h3>
           </Link>
         </div>
       </div>
-      <div className="flex flex-wrap gap-2 mt-3.5">
+      <div className="mt-3.5 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
         ))}
       </div>
-      <div className="flex-wrap flex-between gap-3 mt-6 w-full">
+      <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
           imgUrl={author?.picture}
           alt="user"
@@ -67,7 +67,7 @@ const QuestionCard = ({ question }: QuestionCardType) => {
         <Metric
           imgUrl="/assets/icons/message.svg"
           alt="answers"
-          value={formatNumber(answers)}
+          value={formatNumber(answers.length)}
           title="Answers"
           textStyles="small-medium text-dark400_light800"
         />

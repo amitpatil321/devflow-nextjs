@@ -2,9 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Answer from "@/components/forms/Answer";
+import ListAnswers from "@/components/shared/Answers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import paths from "@/constants/paths";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.actions";
@@ -21,8 +23,17 @@ interface Props {
 
 const page = async ({ params }: Props) => {
   const questionResponse = await getQuestionById({ questionId: params.id });
-  const { _id, title, content, author, tags, answers, createdAt } =
-    questionResponse;
+  const {
+    _id,
+    title,
+    content,
+    author,
+    tags,
+    upvotes,
+    downvotes,
+    answers,
+    createdAt,
+  } = questionResponse;
   const { userId } = await auth();
   if (!userId) redirect(paths.signIn);
   const loggedUser = await getUserById({ userId });
@@ -46,7 +57,18 @@ const page = async ({ params }: Props) => {
               {author.name}
             </p>
           </Link>
-          <div className="flex justify-end">Up Down Votes</div>
+          <div className="small-regular flex justify-end">
+            <Votes
+              type="question"
+              itemId={JSON.stringify(_id)}
+              userId={JSON.stringify(loggedUser._id)}
+              upvotes={upvotes.length}
+              hasUpvoted={upvotes.includes(loggedUser._id)}
+              downvotes={downvotes.length}
+              hasDownvoted={downvotes.includes(loggedUser._id)}
+              hasSaved={loggedUser?.saved.includes(_id)}
+            />
+          </div>
         </div>
         <h2 className="text-dark200_light900 h2-semibold mt-3.5 w-full text-left">
           {title}
@@ -85,6 +107,11 @@ const page = async ({ params }: Props) => {
           <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
         ))}
       </div>
+
+      <ListAnswers
+        questionId={_id}
+        loggedUser={JSON.stringify(loggedUser._id)}
+      />
 
       <div className="mt-8">
         <Answer

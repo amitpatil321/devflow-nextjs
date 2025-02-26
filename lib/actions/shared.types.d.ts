@@ -56,3 +56,7 @@ export interface CreateAnswerProps {
   content: string;
   path: string;
 }
+
+export interface GetAllAnswersProps {
+  questionId: string;
+}

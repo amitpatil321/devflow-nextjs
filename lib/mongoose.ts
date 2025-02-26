@@ -20,6 +20,8 @@ export const connectToDatabase = async () => {
       console.error("❌ Internet connection issue: Cannot reach MongoDB.");
     } else if (error.message.includes("ECONNREFUSED")) {
       console.error("❌ MongoDB server refused the connection.");
+    } else if (error.message.includes("ECONNRESET")) {
+      console.error("❌ MongoDB server connection error.");
     } else {
       console.error("❌ Error connecting to MongoDB:", error);
     }

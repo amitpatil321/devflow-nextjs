@@ -8,7 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 export const timeAgo = (date: Date): string => {
   const now: Date = new Date();
   const past: Date = new Date(date);
-  const seconds: number = Math.floor((now.getTime() - past.getTime()) / 1000);
+
+  const nowUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+
+  const seconds: number = Math.floor(
+    (nowUTC.getTime() - past.getTime()) / 1000,
+  );
 
   const intervals = [
     { label: "year", seconds: 31536000 },

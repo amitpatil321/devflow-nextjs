@@ -60,3 +60,11 @@ export interface CreateAnswerProps {
 export interface GetAllAnswersProps {
   questionId: string;
 }
+
+export interface QuestionVoteProps {
+  questionId: string;
+  userId: string;
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
+  path: string;
+}

@@ -8,7 +8,6 @@ import Link from "next/link";
 
 const page = async () => {
   const tags = await getAllTags();
-  console.log(tags);
   return (
     <>
       <h1 className="text-dark100_light900 h1-bold">Tags</h1>
@@ -28,7 +27,7 @@ const page = async () => {
         />
       </div>
 
-      <section className="xs:w-[260px] max-xs:min-w-full mt-10 flex w-full flex-wrap gap-4">
+      <section className="mt-10 flex w-full flex-wrap gap-4 max-xs:min-w-full xs:w-[260px]">
         {tags.length > 0 ? (
           tags.map((tag) => (
             <Link

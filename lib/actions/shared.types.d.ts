@@ -62,7 +62,14 @@ export interface GetAllAnswersProps {
 }
 
 export interface QuestionVoteProps {
-  questionId: string;
+  itemId: string;
+  userId: string;
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
+  path: string;
+}
+export interface AnswerVoteProps {
+  itemId: string;
   userId: string;
   hasUpvoted: boolean;
   hasDownvoted: boolean;

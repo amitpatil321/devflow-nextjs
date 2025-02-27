@@ -87,7 +87,10 @@ export async function getQuestionById(params: GetQuestionDetailsProps) {
 export async function upvoteQuestion(params: QuestionVoteProps) {
   try {
     connectToDatabase();
-    const { questionId, userId, hasUpvoted, hasDownvoted, path } = params;
+
+    console.log("upvoteQuestion :", params.itemId);
+
+    const { itemId, userId, hasUpvoted, hasDownvoted, path } = params;
     let updateQuery = {};
     if (hasUpvoted) {
       updateQuery = { $pull: { upvotes: userId } };
@@ -100,7 +103,7 @@ export async function upvoteQuestion(params: QuestionVoteProps) {
       updateQuery = { $addToSet: { upvotes: userId } };
     }
 
-    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+    const question = await Question.findByIdAndUpdate(itemId, updateQuery, {
       new: true,
     });
 
@@ -116,7 +119,8 @@ export async function upvoteQuestion(params: QuestionVoteProps) {
 export async function downvoteQuestion(params: QuestionVoteProps) {
   try {
     connectToDatabase();
-    const { questionId, userId, hasUpvoted, hasDownvoted, path } = params;
+    const { itemId, userId, hasUpvoted, hasDownvoted, path } = params;
+
     let updateQuery = {};
     if (hasDownvoted) {
       updateQuery = { $pull: { downvotes: userId } };
@@ -129,7 +133,7 @@ export async function downvoteQuestion(params: QuestionVoteProps) {
       updateQuery = { $addToSet: { downvotes: userId } };
     }
 
-    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+    const question = await Question.findByIdAndUpdate(itemId, updateQuery, {
       new: true,
     });
 

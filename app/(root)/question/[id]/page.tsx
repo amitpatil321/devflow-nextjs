@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Answer from "@/components/forms/Answer";
-import ListAnswers from "@/components/shared/Answers";
+import ListAnswers from "@/components/shared/ListAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
@@ -108,10 +108,7 @@ const page = async ({ params }: Props) => {
         ))}
       </div>
 
-      <ListAnswers
-        questionId={_id}
-        loggedUser={JSON.stringify(loggedUser._id)}
-      />
+      <ListAnswers questionId={_id} loggedUser={loggedUser._id} />
 
       <div className="mt-8">
         <Answer

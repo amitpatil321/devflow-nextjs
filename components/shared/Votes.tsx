@@ -1,15 +1,17 @@
 "use client";
 
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+
+import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import {
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
 import { formatNumber } from "@/lib/utils";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 
 interface VotesProps {
-  type: string;
+  type: "question" | "answer";
   itemId: string;
   userId: string;
   upvotes: number;
@@ -30,35 +32,37 @@ const Votes = ({
 }: VotesProps) => {
   const pathname = usePathname();
 
-  const handleVote = async (action: string) => {
+  const handleVote = async (action: "upvote" | "downvote") => {
     if (!userId) return;
 
-    if (action === "upvote") {
-      if (type === "question") {
-        await upvoteQuestion({
-          questionId: JSON.parse(itemId),
-          userId: JSON.parse(userId),
-          hasUpvoted,
-          hasDownvoted,
-          path: pathname,
-        });
+    if (type !== "question" && type !== "answer") return;
+
+    const params = {
+      itemId: JSON.parse(itemId),
+      userId: JSON.parse(userId),
+      hasUpvoted,
+      hasDownvoted,
+      path: pathname,
+    };
+
+    try {
+      if (action === "upvote") {
+        if (type === "question") await upvoteQuestion(params);
+        if (type === "answer") await upvoteAnswer(params);
       }
-    }
-    if (action === "downvote") {
-      if (type === "question") {
-        await downvoteQuestion({
-          questionId: JSON.parse(itemId),
-          userId: JSON.parse(userId),
-          hasUpvoted,
-          hasDownvoted,
-          path: pathname,
-        });
+      if (action === "downvote") {
+        if (type === "question") await downvoteQuestion(params);
+        if (type === "answer") await downvoteAnswer(params);
       }
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
 
     // Todo: show toast message
     return;
   };
+
   const handleSave = () => console.log("save");
 
   return (
@@ -90,16 +94,18 @@ const Votes = ({
             <p>{formatNumber(downvotes)}</p>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <Image
-            src={`/assets/icons/${hasSaved ? "star-filled.svg" : "star-red.svg"}`}
-            alt="save"
-            width={18}
-            height={18}
-            className="cursor-pointer"
-            onClick={() => handleSave()}
-          />
-        </div>
+        {type === "question" && (
+          <div className="flex items-center gap-1">
+            <Image
+              src={`/assets/icons/${hasSaved ? "star-filled.svg" : "star-red.svg"}`}
+              alt="save"
+              width={18}
+              height={18}
+              className="cursor-pointer"
+              onClick={() => handleSave()}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { getAllAnswers } from "@/lib/actions/answer.action";
 import { timeAgo } from "@/lib/utils";
 import Filters from "./Filters";
 import ParseHTML from "./ParseHTML";
+import Votes from "./Votes";
 
 interface ListAnswersProps {
   questionId: string;
@@ -14,7 +15,6 @@ interface ListAnswersProps {
 
 const ListAnswers = async ({ questionId, loggedUser }: ListAnswersProps) => {
   const allAnswers = await getAllAnswers({ questionId });
-  console.log(allAnswers);
   return (
     <div className="mt-8 flex flex-col">
       <div className="flex items-center justify-between">
@@ -23,7 +23,7 @@ const ListAnswers = async ({ questionId, loggedUser }: ListAnswersProps) => {
         <Filters filters={AnswerFilters} />
       </div>
       {allAnswers?.map(
-        ({ _id, author, question, content, upvotes, downvotes, createdOn }) => (
+        ({ _id, author, content, upvotes, downvotes, createdOn }) => (
           <article key={_id} className="mt-8 flex flex-col gap-4">
             <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
               <Link
@@ -47,7 +47,17 @@ const ListAnswers = async ({ questionId, loggedUser }: ListAnswersProps) => {
                   </p>
                 </div>
               </Link>
-              <div className="small-regular flex justify-end">Votes</div>
+              <div className="small-regular flex justify-end">
+                <Votes
+                  type="answer"
+                  itemId={JSON.stringify(_id)}
+                  userId={JSON.stringify(loggedUser)}
+                  upvotes={upvotes.length}
+                  hasUpvoted={upvotes.includes(loggedUser)}
+                  downvotes={downvotes.length}
+                  hasDownvoted={downvotes.includes(loggedUser)}
+                />
+              </div>
             </div>
             <ParseHTML data={content} />
             <hr />

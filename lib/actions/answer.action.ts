@@ -4,7 +4,11 @@ import Question from "@/database/question.model";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
-import { CreateAnswerProps, GetAllAnswersProps } from "./shared.types";
+import {
+  AnswerVoteProps,
+  CreateAnswerProps,
+  GetAllAnswersProps,
+} from "./shared.types";
 
 export async function createAnswer(params: CreateAnswerProps) {
   try {
@@ -40,6 +44,66 @@ export async function getAllAnswers(params: GetAllAnswersProps) {
       select: "_id clerkId name picture saved",
     });
     return allAnswers;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function upvoteAnswer(params: AnswerVoteProps) {
+  try {
+    connectToDatabase();
+
+    console.log("upvoteAnswer :", params.itemId);
+
+    const { itemId, userId, hasUpvoted, hasDownvoted, path } = params;
+    let updateQuery = {};
+    if (hasUpvoted) {
+      updateQuery = { $pull: { upvotes: userId } };
+    } else if (hasDownvoted) {
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } };
+    }
+
+    const answer = await Answer.findByIdAndUpdate(itemId, updateQuery, {
+      new: true,
+    });
+
+    if (!answer) throw new Error("Answer not found");
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function downvoteAnswer(params: AnswerVoteProps) {
+  try {
+    connectToDatabase();
+    const { itemId, userId, hasUpvoted, hasDownvoted, path } = params;
+    let updateQuery = {};
+    if (hasDownvoted) {
+      updateQuery = { $pull: { downvotes: userId } };
+    } else if (hasUpvoted) {
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { downvotes: userId } };
+    }
+    const answer = await Answer.findByIdAndUpdate(itemId, updateQuery, {
+      new: true,
+    });
+
+    if (!answer) throw new Error("Answer not found");
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     throw error;

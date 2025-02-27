@@ -17,7 +17,7 @@ interface QuestionCardType {
       name: string;
       picture: string;
     };
-    upvotes: number;
+    upvotes: string[];
     views: number;
     answers: string[];
     createdAt: Date;
@@ -60,22 +60,22 @@ const QuestionCard = ({ question }: QuestionCardType) => {
         <Metric
           imgUrl="/assets/icons/like.svg"
           alt="upvotes"
-          value={formatNumber(upvotes)}
-          title="Votes"
+          value={formatNumber(upvotes.length)}
+          title={upvotes.length === 1 ? "Vote" : "Votes"}
           textStyles="small-medium text-dark400_light800"
         />
         <Metric
           imgUrl="/assets/icons/message.svg"
           alt="answers"
           value={formatNumber(answers.length)}
-          title="Answers"
+          title={answers.length === 1 ? "Answer" : "Answers"}
           textStyles="small-medium text-dark400_light800"
         />
         <Metric
           imgUrl="/assets/icons/eye.svg"
           alt="views"
           value={formatNumber(views)}
-          title="Views"
+          title={views === 1 ? "View" : "Views"}
           textStyles="small-medium text-dark400_light800"
         />
       </div>

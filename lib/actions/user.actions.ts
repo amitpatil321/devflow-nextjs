@@ -10,6 +10,7 @@ import {
   CreateUserProps,
   DeleteUserProps,
   GetUserProps,
+  ToggleSaveQuestionProps,
   UpdateUserProps,
 } from "./shared.types";
 
@@ -83,6 +84,29 @@ export async function getUserById(params: GetUserProps) {
     const { userId } = params;
     const user = await User.findOne({ clerkId: userId });
     return user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function toggeSaveQuestion(params: ToggleSaveQuestionProps) {
+  try {
+    connectToDatabase();
+    const { userId, itemId, path } = params;
+
+    const user = await User.findById(userId);
+    if (!user) throw new Error("User not found");
+
+    const isSaved = user.saved.includes(itemId);
+
+    await User.findByIdAndUpdate(userId, {
+      [isSaved ? "$pull" : "$addToSet"]: { saved: itemId },
+    });
+
+    revalidatePath(path);
+
+    // TODO : show toast message
   } catch (error) {
     console.log(error);
     throw error;

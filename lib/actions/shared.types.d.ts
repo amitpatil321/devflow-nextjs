@@ -75,3 +75,9 @@ export interface AnswerVoteProps {
   hasDownvoted: boolean;
   path: string;
 }
+
+export interface ToggleSaveQuestionProps {
+  userId: string;
+  itemId: string;
+  path: string;
+}

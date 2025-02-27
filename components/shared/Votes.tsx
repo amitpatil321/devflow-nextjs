@@ -8,6 +8,7 @@ import {
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
+import { toggeSaveQuestion } from "@/lib/actions/user.actions";
 import { formatNumber } from "@/lib/utils";
 
 interface VotesProps {
@@ -63,7 +64,13 @@ const Votes = ({
     return;
   };
 
-  const handleSave = () => console.log("save");
+  const handleSave = async () => {
+    await toggeSaveQuestion({
+      userId: JSON.parse(userId),
+      itemId: JSON.parse(itemId),
+      path: pathname,
+    });
+  };
 
   return (
     <div className="flex gap-5">

@@ -81,3 +81,7 @@ export interface ToggleSaveQuestionProps {
   itemId: string;
   path: string;
 }
+
+export interface SavedQuestionsProps {
+  clerkId: string;
+}

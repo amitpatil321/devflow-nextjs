@@ -11,7 +11,7 @@ import { HomePageFilters } from "../../../constants/filters";
 import { default as pages, default as paths } from "../../../constants/paths";
 
 const page = async () => {
-  const questions = await getQuestions({});
+  const questions = await getQuestions();
 
   return (
     <>

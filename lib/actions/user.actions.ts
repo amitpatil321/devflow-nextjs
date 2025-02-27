@@ -4,12 +4,14 @@ import { revalidatePath } from "next/cache";
 
 import paths from "@/constants/paths";
 import Question from "@/database/question.model";
+import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 import {
   CreateUserProps,
   DeleteUserProps,
   GetUserProps,
+  SavedQuestionsProps,
   ToggleSaveQuestionProps,
   UpdateUserProps,
 } from "./shared.types";
@@ -107,6 +109,25 @@ export async function toggeSaveQuestion(params: ToggleSaveQuestionProps) {
     revalidatePath(path);
 
     // TODO : show toast message
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getSavedQuestions(params: SavedQuestionsProps) {
+  const { clerkId } = params;
+  connectToDatabase();
+
+  try {
+    const user = await User.findOne({ clerkId });
+    if (!user) throw new Error("User not found");
+
+    const questions = await Question.find({ _id: { $in: user.saved } })
+      .populate({ path: "tags", model: Tag })
+      .populate({ path: "author", model: User });
+
+    return questions || [];
   } catch (error) {
     console.log(error);
     throw error;

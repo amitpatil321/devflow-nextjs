@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.actions";
 import {
   downvoteQuestion,
   upvoteQuestion,
@@ -32,6 +34,14 @@ const Votes = ({
   hasSaved,
 }: VotesProps) => {
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    viewQuestion({
+      questionId: JSON.parse(itemId),
+      userId: JSON.parse(userId),
+    });
+  }, [itemId, userId, pathname, router]);
 
   const handleVote = async (action: "upvote" | "downvote") => {
     if (!userId) return;

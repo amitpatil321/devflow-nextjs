@@ -85,3 +85,8 @@ export interface ToggleSaveQuestionProps {
 export interface SavedQuestionsProps {
   clerkId: string;
 }
+
+export interface ViewQuestionProps {
+  userId: string;
+  questionId: string;
+}

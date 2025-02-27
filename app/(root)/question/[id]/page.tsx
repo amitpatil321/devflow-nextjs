@@ -32,6 +32,7 @@ const page = async ({ params }: Props) => {
     upvotes,
     downvotes,
     answers,
+    views,
     createdAt,
   } = questionResponse;
   const { userId } = await auth();
@@ -94,7 +95,7 @@ const page = async ({ params }: Props) => {
         <Metric
           imgUrl="/assets/icons/eye.svg"
           alt="views"
-          value={0}
+          value={formatNumber(views)}
           title="Views"
           textStyles="text-dark200_light900 small-medium"
         />

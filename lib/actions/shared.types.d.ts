@@ -47,6 +47,9 @@ export interface DeleteUserProps {
 export interface TopInteractedTags {
   userId: string;
 }
+export interface GetTagById {
+  tagId: string;
+}
 export interface GetQuestionDetailsProps {
   questionId: string;
 }

@@ -9,11 +9,8 @@ export const timeAgo = (date: Date): string => {
   const now: Date = new Date();
   const past: Date = new Date(date);
 
-  const nowUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
-
-  const seconds: number = Math.floor(
-    (nowUTC.getTime() - past.getTime()) / 1000,
-  );
+  // Convert both to timestamps directly
+  const seconds: number = Math.floor((now.getTime() - past.getTime()) / 1000);
 
   const intervals = [
     { label: "year", seconds: 31536000 },
@@ -35,7 +32,11 @@ export const timeAgo = (date: Date): string => {
   return "just now";
 };
 
-export const formatNumber = (num: number): string => {
+export const formatNumber = (num: number): string | number => {
+  if (!num) {
+    return 0;
+  }
+
   if (num >= 1_000_000_000) {
     return `${(num / 1_000_000_000).toFixed(1).replace(/\.0$/, "")}B`;
   } else if (num >= 1_000_000) {
@@ -45,4 +46,11 @@ export const formatNumber = (num: number): string => {
   } else {
     return num.toString();
   }
+};
+
+export const getJoinedDate = (date: Date): string => {
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+
+  return `${month} ${year}`;
 };

@@ -7,7 +7,9 @@ import { redirect } from "next/navigation";
 const page = async () => {
   const { userId } = await auth();
 
-  if (!userId) redirect(paths.signIn);
+  if (!userId) {
+    redirect(paths.signIn);
+  }
 
   const mongoUser = await getUserById({ userId });
 
@@ -15,7 +17,7 @@ const page = async () => {
     <div>
       <h1 className="text-dark100_light900 h1-bold">Ask a question</h1>
       <div className="mt-9">
-        <Question userId={JSON.stringify(mongoUser._id)} />
+        <Question userId={JSON.stringify(mongoUser?._id)} />
       </div>
     </div>
   );

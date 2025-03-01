@@ -9,3 +9,9 @@ export interface TagProps {
   createdOn: Date;
   name: string;
 }
+
+export interface BadgeCounts {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
+}

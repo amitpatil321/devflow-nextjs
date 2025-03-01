@@ -93,3 +93,15 @@ export interface ViewQuestionProps {
   userId: string;
   questionId: string;
 }
+
+export interface UserInfoProps {
+  userId: string;
+}
+
+export interface UserQuestionsProps {
+  userId: string;
+}
+
+export interface UserAnswersProps {
+  userId: string;
+}

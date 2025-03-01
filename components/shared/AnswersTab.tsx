@@ -5,15 +5,16 @@ import NoResults from "./NoResults";
 
 interface UserAnswersProps {
   userId: string;
+  clerkId: string | null;
 }
 
-const AnswersTab = async ({ userId }: UserAnswersProps) => {
+const AnswersTab = async ({ userId, clerkId }: UserAnswersProps) => {
   const userAnswers = await getUserAnswers({ userId });
   return (
     <section className="flex flex-col gap-6 mt-6 w-full">
       {userAnswers.length > 0 ? (
         userAnswers.map((answer) => (
-          <AnswerCard key={answer._id} answer={answer} />
+          <AnswerCard key={answer._id} clerkId={clerkId} answer={answer} />
         ))
       ) : (
         <NoResults

@@ -105,3 +105,12 @@ export interface UserQuestionsProps {
 export interface UserAnswersProps {
   userId: string;
 }
+
+export interface DeleteQuestionProps {
+  questionId: string;
+  path: string;
+}
+export interface DeleteAnswerProps {
+  answerId: string;
+  path: string;
+}

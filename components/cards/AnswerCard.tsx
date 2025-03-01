@@ -1,9 +1,12 @@
 import paths from "@/constants/paths";
 import { formatNumber, timeAgo } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
 import Link from "next/link";
+import EditDeleteAction from "../shared/EditDeleteActions";
 import Metric from "../shared/Metric";
 
 interface AnswerCardProps {
+  clerkId: string | null;
   answer: {
     _id: number;
     title: string;
@@ -15,6 +18,7 @@ interface AnswerCardProps {
       _id: string;
       name: string;
       picture: string;
+      clerkId: string;
     };
     upvotes: string[];
     views: number;
@@ -23,9 +27,10 @@ interface AnswerCardProps {
   };
 }
 
-const AnswerCard = ({ answer }: AnswerCardProps) => {
-  console.log(answer);
+const AnswerCard = ({ answer, clerkId }: AnswerCardProps) => {
   const { _id, question, author, upvotes, views, answers, createdOn } = answer;
+  const isAuthor = author.clerkId === clerkId;
+
   return (
     <div className="p-9 sm:px-11 rounded-[10px] card-wrapper">
       <div className="flex sm:flex-row flex-col-reverse justify-between items-start gap-5">
@@ -39,6 +44,11 @@ const AnswerCard = ({ answer }: AnswerCardProps) => {
             </h3>
           </Link>
         </div>
+        <SignedIn>
+          {isAuthor && (
+            <EditDeleteAction itemId={JSON.stringify(_id)} type="answer" />
+          )}
+        </SignedIn>
       </div>
 
       <div className="flex-wrap flex-between gap-3 mt-6 w-full">

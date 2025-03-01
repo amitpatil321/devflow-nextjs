@@ -1,5 +1,7 @@
 "use server";
 
+import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
@@ -7,6 +9,7 @@ import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
 import {
   CreateQuestionProps,
+  DeleteQuestionProps,
   GetQuestionDetailsProps,
   QuestionVoteProps,
 } from "./shared.types";
@@ -138,6 +141,26 @@ export async function downvoteQuestion(params: QuestionVoteProps) {
     });
 
     if (!question) throw new Error("Question not found");
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionProps) {
+  try {
+    connectToDatabase();
+    const { questionId, path } = params;
+
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await Interaction.deleteMany({ question: questionId });
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } },
+    );
 
     revalidatePath(path);
   } catch (error) {

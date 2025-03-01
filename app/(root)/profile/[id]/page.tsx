@@ -101,14 +101,14 @@ const page = async ({ params }) => {
             <QuestionTab
               // searchParams={searchParams}
               userId={userInfo.user._id}
-              // clerkId={clerkId}
+              clerkId={clerkId}
             />
           </TabsContent>
           <TabsContent value="answers" className="flex flex-col gap-6 w-full">
             <AnswersTab
               // searchParams={searchParams}
               userId={userInfo.user._id}
-              // clerkId={clerkId}
+              clerkId={clerkId}
             />
           </TabsContent>
         </Tabs>

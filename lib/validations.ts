@@ -10,5 +10,5 @@ export const AnswerScheme = z.object({
   answer: z
     .string()
     .min(100, { message: "Answer must contain at least 100 characters" })
-    .max(2000),
+    .max(10000),
 });

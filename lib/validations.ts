@@ -12,3 +12,19 @@ export const AnswerScheme = z.object({
     .min(100, { message: "Answer must contain at least 100 characters" })
     .max(10000),
 });
+
+export const ProfileValidationSchema = z.object({
+  name: z.string().min(5, { message: "Name is required" }).max(50).trim(),
+  username: z
+    .string()
+    .min(5, { message: "Username is required" })
+    .max(50)
+    .trim(),
+  bio: z
+    .string()
+    .min(20, { message: "Bio must contain atleast 20 characters" })
+    .max(150)
+    .trim(),
+  portfolioLink: z.union([z.string().url().trim(), z.literal("")]),
+  location: z.union([z.string().min(5).max(50).trim(), z.literal("")]),
+});

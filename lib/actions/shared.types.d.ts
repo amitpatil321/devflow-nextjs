@@ -16,6 +16,13 @@ export interface CreateQuestionProps {
   path: string;
 }
 
+export interface UpdateQuestionProps {
+  questionId: string;
+  title: string;
+  content: string;
+  path: string;
+}
+
 export interface GetUserProps {
   userId: string;
 }

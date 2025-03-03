@@ -19,30 +19,37 @@ import {
 import { Input } from "@/components/ui/input";
 import paths from "@/constants/paths";
 import { useTheme } from "@/context/ThemeProvider";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, updateQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Badge } from "../ui/badge";
 
-const actiontype: string = "create";
-
 interface props {
   userId: string;
+  type: string;
+  questionDetails: string;
 }
 
-const Question = ({ userId }: props) => {
+const Question = ({ type, userId, questionDetails }: props) => {
   const { theme } = useTheme();
   const editorRef = useRef<Editor | null>(null);
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  const {
+    _id,
+    title,
+    content,
+    tags = [],
+  } = questionDetails ? JSON.parse(questionDetails) : {};
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: title || "",
+      explanation: content || "",
+      tags: tags.map((each: any) => each.name) || [],
     },
   });
 
@@ -50,14 +57,24 @@ const Question = ({ userId }: props) => {
     setSubmitting(true);
     const { title, explanation, tags } = values;
     try {
-      await createQuestion({
-        title,
-        content: explanation,
-        tags,
-        author: JSON.parse(userId.toString()),
-        path: pathname,
-      });
-      router.push(paths.home);
+      if (type === "edit") {
+        await updateQuestion({
+          questionId: _id,
+          title,
+          content: explanation,
+          path: pathname,
+        });
+        router.push(`${paths.question}/${_id}`);
+      } else {
+        await createQuestion({
+          title,
+          content: explanation,
+          tags,
+          author: JSON.parse(userId.toString()),
+          path: pathname,
+        });
+        router.push(paths.home);
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -97,34 +114,36 @@ const Question = ({ userId }: props) => {
   };
 
   const handleRemoveTags = (tag: string, field: { value: string[] }) => {
-    form.setValue(
-      "tags",
-      field.value.filter((each: string) => each !== tag),
-    );
+    if (type === "create") {
+      form.setValue(
+        "tags",
+        field.value.filter((each: string) => each !== tag),
+      );
+    }
   };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full flex-col gap-10"
+        className="flex flex-col gap-10 w-full"
       >
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-2">
+            <FormItem className="flex flex-col gap-2 w-full">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Question Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  className="light-border-2 paragraph-regular text-dark300_light700 no-focus background-light700_dark300 min-h-[56px]"
+                  className="light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light700_dark300"
                   placeholder="Question Title"
                   {...field}
                 />
               </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
+              <FormDescription className="mt-2.5 text-light-500 body-regular">
                 Be specific and imagine you&apos;re asking question to another
                 person.
               </FormDescription>
@@ -136,7 +155,7 @@ const Question = ({ userId }: props) => {
           control={form.control}
           name="explanation"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-2">
+            <FormItem className="flex flex-col gap-2 w-full">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Explanation <span className="text-primary-500">*</span>
               </FormLabel>
@@ -150,7 +169,7 @@ const Question = ({ userId }: props) => {
                   onEditorChange={(content) => {
                     field.onChange(content);
                   }}
-                  initialValue=""
+                  initialValue={content || ""}
                   init={{
                     height: 350,
                     menubar: false,
@@ -178,7 +197,7 @@ const Question = ({ userId }: props) => {
                   // {...field}
                 />
               </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
+              <FormDescription className="mt-2.5 text-light-500 body-regular">
                 Introduce the problem and expand on what you put in the title,
                 Minumum 20 characters. person.
               </FormDescription>
@@ -190,25 +209,27 @@ const Question = ({ userId }: props) => {
           control={form.control}
           name="tags"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-2">
+            <FormItem className="flex flex-col gap-2 w-full">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Tags <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
                 <>
                   <Input
-                    className="light-border-2 paragraph-regular text-dark300_light700 no-focus background-light700_dark300 min-h-[56px]"
+                    className="light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light700_dark300"
                     placeholder="Add tags..."
+                    disabled={type === "edit"}
                     onKeyDown={(event) => handleTagInput(event, field)}
                     autoComplete="off"
                   />
                   <RenderTags
                     field={field}
                     handleRemoveTags={handleRemoveTags}
+                    type={type}
                   />
                 </>
               </FormControl>
-              <FormDescription className="body-regular mt-2.5 text-light-500">
+              <FormDescription className="mt-2.5 text-light-500 body-regular">
                 Add upto 3 tags to describe what your question is about. You
                 need to press enter to add a tag.
               </FormDescription>
@@ -217,14 +238,14 @@ const Question = ({ userId }: props) => {
           )}
         />
         <Button
-          className="primary-gradient w-fit px-4 py-3 !text-light-900"
+          className="px-4 py-3 w-fit !text-light-900 primary-gradient"
           type="submit"
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <>{actiontype === "edit" ? "Editing..." : "Posting..."}</>
+            <>{type === "edit" ? "Editing..." : "Posting..."}</>
           ) : (
-            <>{actiontype === "edit" ? "Edit Question" : "Ask a Questions"} </>
+            <>{type === "edit" ? "Update Question" : "Ask a Questions"} </>
           )}
         </Button>
       </form>
@@ -235,9 +256,11 @@ const Question = ({ userId }: props) => {
 const RenderTags = ({
   field,
   handleRemoveTags,
+  type,
 }: {
   field: { value: string[] };
   handleRemoveTags: (tag: string, field: { value: string[] }) => void;
+  type: string;
 }) => {
   if (!Array.isArray(field.value) || field.value.length === 0) return null;
 
@@ -246,17 +269,19 @@ const RenderTags = ({
       {field.value.map((tag) => (
         <Badge
           key={tag}
-          className="item-center text-light400_light500 subtle-medium background-light800_dark300 flex justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
+          className="flex justify-center gap-2 item-center px-4 py-2 border-none rounded-md text-light400_light500 capitalize subtle-medium background-light800_dark300"
           onClick={() => handleRemoveTags(tag, field)}
         >
           {tag}
-          <Image
-            src="/assets/icons/close.svg"
-            alt="Close Icon"
-            width={12}
-            height={12}
-            className="cursor-pointer object-contain invert-0 dark:invert"
-          />
+          {type === "create" && (
+            <Image
+              src="/assets/icons/close.svg"
+              alt="Close Icon"
+              width={12}
+              height={12}
+              className="dark:invert invert-0 object-contain cursor-pointer"
+            />
+          )}
         </Badge>
       ))}
     </div>

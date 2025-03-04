@@ -121,3 +121,13 @@ export interface DeleteAnswerProps {
   answerId: string;
   path: string;
 }
+
+export interface UpdateProfileProps {
+  userId: string;
+  name: string;
+  username: string;
+  portfolioWebsite: string;
+  location: string;
+  bio: string;
+  path: string;
+}

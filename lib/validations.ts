@@ -23,8 +23,8 @@ export const ProfileValidationSchema = z.object({
   bio: z
     .string()
     .min(20, { message: "Bio must contain atleast 20 characters" })
-    .max(150)
+    .max(500)
     .trim(),
-  portfolioLink: z.union([z.string().url().trim(), z.literal("")]),
-  location: z.union([z.string().min(5).max(50).trim(), z.literal("")]),
+  portfolioWebsite: z.union([z.string().url().trim(), z.literal("")]),
+  location: z.string().min(2).max(50),
 });

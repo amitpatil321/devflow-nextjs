@@ -14,6 +14,7 @@ import {
   GetUserProps,
   SavedQuestionsProps,
   ToggleSaveQuestionProps,
+  UpdateProfileProps,
   UpdateUserProps,
   UserAnswersProps,
   UserInfoProps,
@@ -202,5 +203,27 @@ export async function getUserAnswers(params: UserAnswersProps) {
   } catch (error) {
     console.log(error);
     throw error;
+  }
+}
+
+export async function updateProfile(params: UpdateProfileProps) {
+  try {
+    connectToDatabase();
+
+    const { userId, name, username, portfolioWebsite, location, bio, path } =
+      params;
+    const user = await User.findById(userId);
+    if (!user) throw new Error("User not found");
+
+    user.name = name;
+    user.username = username;
+    user.portfolioWebsite = portfolioWebsite;
+    user.location = location;
+    user.bio = bio;
+    await user.save();
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(error);
   }
 }

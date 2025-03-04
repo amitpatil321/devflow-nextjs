@@ -17,24 +17,24 @@ const page = async ({ params }) => {
   return (
     <>
       <div className="flex sm:flex-row flex-col-reverse justify-between items-start">
-        <div className="flex lg:flex-row flex-col items-center gap-4">
+        <div className="flex lg:flex-row flex-col items-start gap-4 align-top">
           <Image
             src={userInfo?.user.picture}
             alt="profile picture"
             width={140}
             height={140}
-            className="rounded-full object-cover"
+            className="p-0.5 border-2 border-slate-200 rounded-full object-cover"
           />
 
-          <div className="flex flex-col items-center mt-3">
+          <div className="flex flex-col">
             <h2 className="text-dark100_light900 h2-bold">
               {userInfo.user.name}
             </h2>
-            <p className="paragraph-regular text-dark200_light800">
+            <p className="mt-1 paragraph-regular text-dark200_light800">
               @{userInfo.user.username}
             </p>
 
-            <div className="flex flex-wrap justify-start items-center gap-5 mt-5">
+            <div className="flex flex-wrap justify-start items-center gap-5 mt-4">
               {userInfo.user.portfolioWebsite && (
                 <ProfileLink
                   imgUrl="/assets/icons/link.svg"
@@ -57,14 +57,14 @@ const page = async ({ params }) => {
             </div>
 
             {userInfo.user.bio && (
-              <p className="mt-8 paragraph-regular text-dark400_light800">
+              <p className="mt-4 paragraph-regular text-dark400_light800">
                 {userInfo.user.bio}
               </p>
             )}
           </div>
         </div>
 
-        <div className="flex justify-end sm:mt-3 max-sm:mb-5 max-sm:w-full">
+        <div className="flex justify-end max-sm:mb-5 max-sm:w-full">
           <SignedIn>
             {clerkId === userInfo.user.clerkId && (
               <Link href="/profile/edit">

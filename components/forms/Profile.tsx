@@ -14,26 +14,57 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import paths from "@/constants/paths";
+import { updateProfile } from "@/lib/actions/user.actions";
 import { ProfileValidationSchema } from "@/lib/validations";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 
-export function Profile() {
+interface ProfileProps {
+  userInfo: string;
+}
+
+export const Profile = ({ userInfo }: ProfileProps) => {
+  const router = useRouter();
+  const { name, username, portfolioWebsite, location, bio } =
+    JSON.parse(userInfo);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const form = useForm<z.infer<typeof ProfileValidationSchema>>({
     resolver: zodResolver(ProfileValidationSchema),
     defaultValues: {
-      name: "",
-      username: "",
-      portfolioLink: "",
-      location: "",
-      bio: "",
+      name: name || "",
+      username: username || "",
+      portfolioWebsite: portfolioWebsite || "",
+      location: location || "",
+      bio: bio || "",
     },
     mode: "onChange",
   });
 
-  function onSubmit(values: z.infer<typeof ProfileValidationSchema>) {
-    console.log(values);
+  async function onSubmit(formData: z.infer<typeof ProfileValidationSchema>) {
+    const { _id, clerkId } = JSON.parse(userInfo);
+    const { name, username, portfolioWebsite, location, bio } = formData;
+    setIsSubmitting(true);
+    try {
+      await updateProfile({
+        userId: _id,
+        name,
+        username,
+        portfolioWebsite,
+        location,
+        bio,
+        path: `${paths.profile}/${clerkId}`,
+      });
+
+      router.back();
+      //   redirect(`${paths.profile}/${clerkId}`);
+    } catch (err: any) {
+      console.log(err);
+      throw new Error("Error updating profile");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -82,7 +113,7 @@ export function Profile() {
         />
         <FormField
           control={form.control}
-          name="portfolioLink"
+          name="portfolioWebsite"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="paragraph-semibold text-dark400_light800">
@@ -130,6 +161,7 @@ export function Profile() {
                 <Textarea
                   className="bg-background light-border-2 paragraph-regular text-dark300_light700 no-focus background-light800_dark300"
                   placeholder="Tell us more about yourself"
+                  rows={3}
                   {...field}
                 />
               </FormControl>
@@ -149,4 +181,4 @@ export function Profile() {
       </form>
     </Form>
   );
-}
+};

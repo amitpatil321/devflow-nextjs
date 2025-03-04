@@ -26,8 +26,8 @@ import { Badge } from "../ui/badge";
 
 interface props {
   userId: string;
-  type: string;
-  questionDetails: string;
+  type?: string;
+  questionDetails?: string;
 }
 
 const Question = ({ type, userId, questionDetails }: props) => {
@@ -260,7 +260,7 @@ const RenderTags = ({
 }: {
   field: { value: string[] };
   handleRemoveTags: (tag: string, field: { value: string[] }) => void;
-  type: string;
+  type?: string;
 }) => {
   if (!Array.isArray(field.value) || field.value.length === 0) return null;
 

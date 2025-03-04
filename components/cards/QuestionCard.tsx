@@ -7,7 +7,7 @@ import Metric from "../shared/Metric";
 import RenderTag from "../shared/RenderTag";
 
 interface QuestionCardType {
-  clerkId: string | null;
+  clerkId?: string | null;
   question: {
     _id: number;
     title: string;

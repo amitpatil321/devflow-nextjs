@@ -10,7 +10,7 @@ interface StatsCardProps {
 
 const StatsCard = ({ imgUrl, value, title }: StatsCardProps) => {
   return (
-    <div className="light-border background-light900_dark300 flex flex-wrap items-center justify-start gap-4 rounded-md border p-6 shadow-light-300 dark:shadow-dark-200">
+    <div className="flex flex-wrap justify-start items-center gap-4 shadow-light-300 dark:shadow-dark-200 p-6 border light-border rounded-md background-light900_dark300">
       <Image src={imgUrl} alt={title} width={40} height={50} />
       <div>
         <p className="paragraph-semibold text-dark200_light900">{value}</p>
@@ -23,17 +23,17 @@ const StatsCard = ({ imgUrl, value, title }: StatsCardProps) => {
 interface Props {
   totalQuestions: number;
   totalAnswers: number;
-  badges: BadgeCounts;
-  reputation: number;
+  badges?: BadgeCounts;
+  reputation?: number;
 }
 
-const Stats = ({ totalQuestions, totalAnswers, badges, reputation }: Props) => {
+const Stats = ({ totalQuestions, totalAnswers }: Props) => {
   return (
     <div className="mt-10">
       <h4 className="text-dark200_light900 h3-semibold">Stats</h4>
 
-      <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
-        <div className="light-border background-light900_dark300 flex flex-wrap items-center justify-evenly gap-4 rounded-md border p-6 shadow-light-300 dark:shadow-dark-200">
+      <div className="gap-5 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 mt-5">
+        <div className="flex flex-wrap justify-evenly items-center gap-4 shadow-light-300 dark:shadow-dark-200 p-6 border light-border rounded-md background-light900_dark300">
           <div>
             <p className="paragraph-semibold text-dark200_light900">
               {formatNumber(totalQuestions)}

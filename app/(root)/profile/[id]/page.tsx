@@ -5,12 +5,19 @@ import Stats from "@/components/shared/Stats";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserInfo } from "@/lib/actions/user.actions";
+import { getJoinedDate } from "@/lib/utils";
 import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
-const page = async ({ params }) => {
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+const page = async ({ params }: PageProps) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });
 
@@ -50,10 +57,10 @@ const page = async ({ params }) => {
                 />
               )}
 
-              {/* <ProfileLink
+              <ProfileLink
                 imgUrl="/assets/icons/calendar.svg"
-                title={getJoinedDate(userInfo.user.joinedAt)}
-              /> */}
+                title={`Joined - ${getJoinedDate(userInfo.user.joinedAt)}`}
+              />
             </div>
 
             {userInfo.user.bio && (

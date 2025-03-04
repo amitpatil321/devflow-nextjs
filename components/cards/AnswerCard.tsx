@@ -6,10 +6,14 @@ import EditDeleteAction from "../shared/EditDeleteActions";
 import Metric from "../shared/Metric";
 
 interface AnswerCardProps {
-  clerkId: string | null;
+  clerkId?: string | null;
   answer: {
     _id: number;
     title: string;
+    question: {
+      _id: string;
+      title: string;
+    };
     tags: {
       _id: string;
       name: string;
@@ -23,12 +27,12 @@ interface AnswerCardProps {
     upvotes: string[];
     views: number;
     answers: string[];
-    createdAt: Date;
+    createdOn: Date;
   };
 }
 
 const AnswerCard = ({ answer, clerkId }: AnswerCardProps) => {
-  const { _id, question, author, upvotes, views, answers, createdOn } = answer;
+  const { _id, question, author, upvotes, createdOn } = answer;
   const isAuthor = author.clerkId === clerkId;
 
   return (

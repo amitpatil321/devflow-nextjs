@@ -4,15 +4,15 @@ import Image from "next/image";
 import paths from "@/constants/paths";
 import Link from "next/link";
 import GlobalSearch from "../search/GlobalSearch";
-import { MobileNav } from "./MobileNav";
+import MobileNav from "./MobileNav";
 import ThemeSwitcher from "./ThemeSwitcher";
 
 const NavBar = () => {
   return (
-    <nav className="shadow-light-300 fixed z-50 flex w-full items-center justify-between gap-5 bg-white p-6 shadow-lg dark:bg-dark-500">
+    <nav className="z-50 fixed flex justify-between items-center gap-5 bg-white dark:bg-dark-500 shadow-lg shadow-light-300 p-6 w-full">
       <Link
         href={`${paths.home}`}
-        className="flex items-center justify-center gap-1"
+        className="flex justify-center items-center gap-1"
         passHref
       >
         <Image
@@ -21,7 +21,7 @@ const NavBar = () => {
           height={30}
           alt="logo"
         />
-        <span className="text-2xl font-bold text-gray-800 dark:text-white max-sm:hidden">
+        <span className="max-sm:hidden font-bold text-gray-800 dark:text-white text-2xl">
           Dev<span className="text-primary-500">Overflow</span>
         </span>
       </Link>

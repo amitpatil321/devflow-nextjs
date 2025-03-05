@@ -18,7 +18,7 @@ import {
 // export async function getQuestions(params: GetQuestionsProps) {
 export async function getQuestions() {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     return await Question.find({})
       .populate({ path: "tags", model: Tag })
@@ -185,6 +185,21 @@ export async function deleteQuestion(params: DeleteQuestionProps) {
     );
 
     revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getHotQuestions() {
+  try {
+    await connectToDatabase();
+
+    const hotQuestions = await Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5);
+
+    return hotQuestions;
   } catch (error) {
     console.log(error);
     throw error;

@@ -7,11 +7,11 @@ import NoResults from "@/components/shared/NoResults";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { getQuestions } from "@/lib/actions/question.action";
-import { searchParamsProps } from "@/lib/actions/shared.types";
+import { SearchParamsProps } from "@/lib/actions/shared.types";
 import { HomePageFilters } from "../../../constants/filters";
 import { default as pages, default as paths } from "../../../constants/paths";
 
-const page = async ({ searchParams }: searchParamsProps) => {
+const page = async ({ searchParams }: SearchParamsProps) => {
   const questions = await getQuestions({ searchQuery: searchParams.q });
 
   return (

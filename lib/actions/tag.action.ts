@@ -2,6 +2,7 @@
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
+import { FilterQuery } from "mongoose";
 import { connectToDatabase } from "../mongoose";
 import { GetTagById, TopInteractedTags } from "./shared.types";
 
@@ -25,10 +26,18 @@ export async function getTopInteractedTags(params: TopInteractedTags) {
   }
 }
 
-export async function getAllTags() {
+export async function getAllTags(params: { searchQuery: string | undefined }) {
   try {
     connectToDatabase();
-    return await Tag.find();
+    const searchTerm = params.searchQuery;
+
+    const query: FilterQuery<typeof Tag> = {};
+
+    if (searchTerm) {
+      query.$or = [{ name: new RegExp(searchTerm, "i") }];
+    }
+
+    return await Tag.find(query);
   } catch (error) {
     console.log(error);
     throw error;

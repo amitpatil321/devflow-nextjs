@@ -12,7 +12,7 @@ import { HomePageFilters } from "../../../constants/filters";
 import { default as pages, default as paths } from "../../../constants/paths";
 
 const page = async ({ searchParams }: searchParamsProps) => {
-  const questions = await getQuestions(searchParams);
+  const questions = await getQuestions({ searchQuery: searchParams.q });
 
   return (
     <>
@@ -43,7 +43,7 @@ const page = async ({ searchParams }: searchParamsProps) => {
       <HomeFilters />
 
       <section className="mt-6 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
+        {questions?.length > 0 ? (
           questions.map((question) => (
             <QuestionCard key={question._id} question={question} />
           ))

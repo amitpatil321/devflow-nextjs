@@ -12,16 +12,15 @@ import {
   CreateQuestionProps,
   DeleteQuestionProps,
   GetQuestionDetailsProps,
+  GetQuestionsProps,
   QuestionVoteProps,
   UpdateQuestionProps,
 } from "./shared.types";
 
-// export async function getQuestions(params: GetQuestionsProps) {
-export async function getQuestions(searchParams: { q: string | null }) {
+export async function getQuestions(params: GetQuestionsProps) {
   try {
     await connectToDatabase();
-
-    const searchTerm = searchParams.q;
+    const searchTerm = params.searchQuery;
     const query: FilterQuery<typeof Question> = {};
 
     if (searchTerm) {

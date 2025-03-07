@@ -94,7 +94,7 @@ export interface ToggleSaveQuestionProps {
 
 export interface SavedQuestionsProps {
   clerkId: string;
-  searchQuery: string;
+  searchQuery: string | undefined;
 }
 
 export interface ViewQuestionProps {
@@ -133,7 +133,7 @@ export interface UpdateProfileProps {
   path: string;
 }
 
-export interface searchParamsProps {
+export interface SearchParamsProps {
   searchParams: {
     [key: string]: string | undefined;
   };

@@ -131,3 +131,9 @@ export interface UpdateProfileProps {
   bio: string;
   path: string;
 }
+
+export interface searchParamsProps {
+  searchParams: {
+    [key: string]: string | undefined;
+  };
+}

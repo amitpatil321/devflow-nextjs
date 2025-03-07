@@ -1,6 +1,9 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import { makeUrl } from "@/lib/utils";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface LocalSearchType {
   route: string;
@@ -11,12 +14,24 @@ interface LocalSearchType {
 }
 
 const LocalSearch = ({
-  route,
   iconPosition,
   imgSrc,
   placeholder,
   otherClasses,
 }: LocalSearchType) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      const updatedUrl = makeUrl("q", searchTerm);
+      router.push("?" + updatedUrl, { scroll: false });
+    }, 500);
+    return () => clearTimeout(debounce);
+  }, [searchTerm]);
+
   return (
     <div className="bg-light flex min-h-[56px] w-full grow flex-row items-center rounded-xl bg-light-800 px-4 py-2 dark:bg-dark-400">
       {iconPosition == "left" && (
@@ -30,10 +45,10 @@ const LocalSearch = ({
       )}
       <Input
         type="text"
-        value=""
+        value={searchTerm}
         placeholder={placeholder}
         className={`no-focus placeholder border-none bg-transparent text-[16px] shadow-none outline-none dark:border-none dark:bg-dark-400 ${otherClasses}`}
-        onChange={() => console.log("on change")}
+        onChange={(event) => setSearchTerm(event.target.value)}
       />
       {iconPosition == "right" && (
         <Image

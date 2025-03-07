@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import queryString from "query-string";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -53,4 +54,12 @@ export const getJoinedDate = (date: Date): string => {
   const year = date.getFullYear();
 
   return `${month} ${year}`;
+};
+
+export const makeUrl = (key: string, value: string | null) => {
+  const url = queryString.parse(location.search);
+  // if value doenst exists then remove it
+  if (value) url[key] = value;
+  else delete url[key];
+  return queryString.stringify(url, { skipNull: true });
 };

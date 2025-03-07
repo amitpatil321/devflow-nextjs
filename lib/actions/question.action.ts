@@ -5,6 +5,7 @@ import Interaction from "@/database/interaction.model";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
+import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
 import {
@@ -16,11 +17,21 @@ import {
 } from "./shared.types";
 
 // export async function getQuestions(params: GetQuestionsProps) {
-export async function getQuestions() {
+export async function getQuestions(searchParams: { q: string | null }) {
   try {
     await connectToDatabase();
 
-    return await Question.find({})
+    const searchTerm = searchParams.q;
+    const query: FilterQuery<typeof Question> = {};
+
+    if (searchTerm) {
+      query.$or = [
+        { title: new RegExp(searchTerm, "i") },
+        { content: new RegExp(searchTerm, "i") },
+      ];
+    }
+
+    return await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User });
   } catch (error) {

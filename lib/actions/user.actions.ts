@@ -7,6 +7,7 @@ import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
+import { FilterQuery } from "mongoose";
 import { connectToDatabase } from "../mongoose";
 import {
   CreateUserProps,
@@ -21,10 +22,20 @@ import {
   UserQuestionsProps,
 } from "./shared.types";
 
-export async function getAllUsers() {
+export async function getAllUsers(params: { searchQuery: string | null }) {
   try {
     connectToDatabase();
-    return await User.find({ createdAt: -1 });
+    const searchTerm = params.searchQuery;
+    const query: FilterQuery<typeof User> = {};
+
+    if (searchTerm) {
+      query.$or = [
+        { name: new RegExp(searchTerm, "i") },
+        { username: new RegExp(searchTerm, "i") },
+      ];
+    }
+
+    return await User.find(query).sort({ createdAt: -1 });
   } catch (error) {
     console.log(error);
     throw error;

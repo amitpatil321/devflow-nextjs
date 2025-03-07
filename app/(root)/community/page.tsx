@@ -3,11 +3,14 @@ import Filters from "@/components/shared/Filters";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import paths from "@/constants/paths";
+import { searchParamsProps } from "@/lib/actions/shared.types";
 import { getAllUsers } from "@/lib/actions/user.actions";
 import { UserFilters } from "../../../constants/filters";
 
-const page = async () => {
-  const allUsers = await getAllUsers();
+const page = async ({ searchParams }: searchParamsProps) => {
+  const allUsers = await getAllUsers({
+    searchQuery: searchParams.q ?? null,
+  });
 
   return (
     <>

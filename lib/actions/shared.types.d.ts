@@ -94,6 +94,7 @@ export interface ToggleSaveQuestionProps {
 
 export interface SavedQuestionsProps {
   clerkId: string;
+  searchQuery: string;
 }
 
 export interface ViewQuestionProps {

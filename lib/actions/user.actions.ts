@@ -137,8 +137,8 @@ export async function toggeSaveQuestion(params: ToggleSaveQuestionProps) {
 }
 
 export async function getSavedQuestions(params: SavedQuestionsProps) {
-  const { clerkId } = params;
-  connectToDatabase();
+  const { clerkId, searchQuery: searchTerm } = params;
+  await connectToDatabase();
 
   try {
     const user = await User.findOne({ clerkId });
@@ -146,11 +146,20 @@ export async function getSavedQuestions(params: SavedQuestionsProps) {
       throw new Error("User not found");
     }
 
-    const questions = await Question.find({ _id: { $in: user.saved } })
+    const query: FilterQuery<typeof Question> = { _id: { $in: user.saved } };
+
+    if (searchTerm) {
+      query.$or = [
+        { title: new RegExp(searchTerm, "i") },
+        { content: new RegExp(searchTerm, "i") },
+      ];
+    }
+
+    const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User });
 
-    return questions || [];
+    return questions;
   } catch (error) {
     console.log(error);
     throw error;

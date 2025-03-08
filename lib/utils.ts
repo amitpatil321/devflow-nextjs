@@ -6,31 +6,40 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const timeAgo = (date: Date): string => {
-  const now: Date = new Date();
-  const past: Date = new Date(date);
+export const timeAgo = (createdAt: Date): string => {
+  const now = new Date();
+  const timeDifference = now.getTime() - createdAt.getTime();
 
-  // Convert both to timestamps directly
-  const seconds: number = Math.floor((now.getTime() - past.getTime()) / 1000);
+  // Define time intervals in milliseconds
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const week = 7 * day;
+  const month = 30 * day;
+  const year = 365 * day;
 
-  const intervals = [
-    { label: "year", seconds: 31536000 },
-    { label: "month", seconds: 2592000 },
-    { label: "week", seconds: 604800 },
-    { label: "day", seconds: 86400 },
-    { label: "hour", seconds: 3600 },
-    { label: "minute", seconds: 60 },
-    { label: "second", seconds: 1 },
-  ];
-
-  for (const interval of intervals) {
-    const count = Math.floor(seconds / interval.seconds);
-    if (count >= 1) {
-      return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
-    }
+  if (timeDifference < minute) {
+    const seconds = Math.floor(timeDifference / 1000);
+    return `${seconds} ${seconds === 1 ? "second" : "seconds"} ago`;
+  } else if (timeDifference < hour) {
+    const minutes = Math.floor(timeDifference / minute);
+    return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+  } else if (timeDifference < day) {
+    const hours = Math.floor(timeDifference / hour);
+    return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+  } else if (timeDifference < week) {
+    const days = Math.floor(timeDifference / day);
+    return `${days} ${days === 1 ? "day" : "days"} ago`;
+  } else if (timeDifference < month) {
+    const weeks = Math.floor(timeDifference / week);
+    return `${weeks} ${weeks === 1 ? "week" : "weeks"} ago`;
+  } else if (timeDifference < year) {
+    const months = Math.floor(timeDifference / month);
+    return `${months} ${months === 1 ? "month" : "months"} ago`;
+  } else {
+    const years = Math.floor(timeDifference / year);
+    return `${years} ${years === 1 ? "year" : "years"} ago`;
   }
-
-  return "just now";
 };
 
 export const formatNumber = (num: number): string | number => {

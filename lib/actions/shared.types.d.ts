@@ -94,7 +94,8 @@ export interface ToggleSaveQuestionProps {
 
 export interface SavedQuestionsProps {
   clerkId: string;
-  searchQuery: string | undefined;
+  searchQuery?: string | null;
+  filter?: string | null;
 }
 
 export interface ViewQuestionProps {

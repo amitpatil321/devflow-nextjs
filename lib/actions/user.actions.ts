@@ -155,13 +155,32 @@ export async function toggeSaveQuestion(params: ToggleSaveQuestionProps) {
 }
 
 export async function getSavedQuestions(params: SavedQuestionsProps) {
-  const { clerkId, searchQuery: searchTerm } = params;
+  const { clerkId, searchQuery: searchTerm, filter } = params;
   await connectToDatabase();
 
   try {
     const user = await User.findOne({ clerkId });
     if (!user) {
       throw new Error("User not found");
+    }
+
+    let sortOptions = {};
+    switch (filter) {
+      case "most_recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "oldest":
+        sortOptions = { createdAt: 1 };
+        break;
+      case "most_voted":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "most_viewed":
+        sortOptions = { views: -1 };
+        break;
+      case "most_answered":
+        sortOptions = { answers: -1 };
+        break;
     }
 
     const query: FilterQuery<typeof Question> = { _id: { $in: user.saved } };
@@ -175,7 +194,8 @@ export async function getSavedQuestions(params: SavedQuestionsProps) {
 
     const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
-      .populate({ path: "author", model: User });
+      .populate({ path: "author", model: User })
+      .sort(sortOptions);
 
     return questions;
   } catch (error) {

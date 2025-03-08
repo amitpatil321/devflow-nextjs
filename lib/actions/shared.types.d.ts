@@ -2,10 +2,9 @@ import { IUser } from "@/database/user.model";
 import { Schema } from "mongoose";
 
 export interface GetQuestionsProps {
-  page?: number;
-  pageSize?: number;
   searchQuery?: string | null;
   filter?: string | null;
+  page?: number | null;
 }
 
 export interface CreateQuestionProps {

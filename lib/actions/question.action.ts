@@ -1,5 +1,6 @@
 "use server";
 
+import { ItemsPerPage } from "@/constants";
 import Answer from "@/database/answer.model";
 import Interaction from "@/database/interaction.model";
 import Question from "@/database/question.model";
@@ -20,8 +21,9 @@ import {
 export async function getQuestions(params: GetQuestionsProps) {
   try {
     await connectToDatabase();
-    const { searchQuery: searchTerm, filter } = params;
+    const { searchQuery: searchTerm, filter, page } = params;
     const query: FilterQuery<typeof Question> = {};
+    const pageNumber = Number(page) || 1;
 
     if (searchTerm) {
       query.$or = [
@@ -47,10 +49,14 @@ export async function getQuestions(params: GetQuestionsProps) {
         break;
     }
 
-    return await Question.find(query)
+    const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
+      .skip((pageNumber - 1) * ItemsPerPage)
+      .limit(ItemsPerPage)
       .sort(sortOptions);
+
+    return { questions, total: await Question.countDocuments() };
   } catch (error) {
     console.log(error);
     throw error;

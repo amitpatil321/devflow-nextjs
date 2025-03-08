@@ -27,7 +27,7 @@ const LocalSearch = ({
   useEffect(() => {
     const debounce = setTimeout(() => {
       const updatedUrl = makeUrl("q", searchTerm);
-      router.push("?" + updatedUrl, { scroll: false });
+      router.push(updatedUrl, { scroll: false });
     }, 300);
     return () => clearTimeout(debounce);
   }, [searchTerm]);

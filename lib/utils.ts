@@ -61,5 +61,5 @@ export const makeUrl = (key: string, value: string | null) => {
   // if value doenst exists then remove it
   if (value) url[key] = value;
   else delete url[key];
-  return queryString.stringify(url, { skipNull: true });
+  return `?${queryString.stringify(url, { skipNull: true, skipEmptyString: true })}`;
 };

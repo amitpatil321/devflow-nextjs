@@ -12,7 +12,10 @@ import { HomePageFilters } from "../../../constants/filters";
 import { default as pages, default as paths } from "../../../constants/paths";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
-  const questions = await getQuestions({ searchQuery: searchParams.q });
+  const questions = await getQuestions({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
 
   return (
     <>

@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { makeUrl } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface FiltersType {
   filters: {
@@ -25,9 +27,16 @@ const Filters = ({
   containerClasses,
   placeholder,
 }: FiltersType) => {
+  const router = useRouter();
+
+  const handleChange = (item: string) => {
+    const url = makeUrl("filter", item);
+    router.push(url, { scroll: false });
+  };
+
   return (
     <div className={`relative ${containerClasses || ""}`}>
-      <Select>
+      <Select onValueChange={handleChange}>
         <SelectTrigger
           className={`${otherClasses} body-regular light-border background-light800_dark300 text-darl500_light700 min-h-[54px] border px-5 py-2.5 sm:min-w-[180px]`}
         >

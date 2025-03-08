@@ -135,6 +135,6 @@ export interface UpdateProfileProps {
 
 export interface SearchParamsProps {
   searchParams: {
-    [key: string]: string | undefined;
+    [key: string]: string | null;
   };
 }

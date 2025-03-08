@@ -22,10 +22,15 @@ import {
   UserQuestionsProps,
 } from "./shared.types";
 
-export async function getAllUsers(params: { searchQuery: string | null }) {
+interface GetAllUsersProps {
+  searchQuery: string | null;
+  filter: string | null;
+}
+
+export async function getAllUsers(params: GetAllUsersProps) {
   try {
     connectToDatabase();
-    const searchTerm = params.searchQuery;
+    const { searchQuery: searchTerm, filter } = params;
     const query: FilterQuery<typeof User> = {};
 
     if (searchTerm) {
@@ -35,7 +40,20 @@ export async function getAllUsers(params: { searchQuery: string | null }) {
       ];
     }
 
-    return await User.find(query).sort({ createdAt: -1 });
+    let sortOptions = {};
+    switch (filter) {
+      case "new_users":
+        sortOptions = { joinedAt: -1 };
+        break;
+      case "old_users":
+        sortOptions = { joinedAt: 1 };
+        break;
+      case "top_contributors":
+        sortOptions = { reputation: -1 };
+        break;
+    }
+
+    return await User.find(query).sort(sortOptions);
   } catch (error) {
     console.log(error);
     throw error;

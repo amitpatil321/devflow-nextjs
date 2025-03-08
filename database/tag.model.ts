@@ -1,8 +1,8 @@
 import { InferSchemaType, model, models, Schema } from "mongoose";
 
 const TagSchema = new Schema({
-  name: { type: "string", required: true, unique: true },
-  description: { type: "string", required: true },
+  name: { type: String, required: true, unique: true },
+  description: { type: String, required: true },
   questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
   followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
   createdOn: { type: Date, default: new Date() },

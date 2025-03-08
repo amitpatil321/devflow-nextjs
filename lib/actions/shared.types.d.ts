@@ -139,3 +139,8 @@ export interface SearchParamsProps {
     [key: string]: string | null;
   };
 }
+
+export interface GetAllTagsProps {
+  searchQuery: string | null;
+  filter: string | null;
+}

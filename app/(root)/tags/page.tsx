@@ -1,14 +1,17 @@
 import Filters from "@/components/shared/Filters";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
-import { UserFilters } from "@/constants/filters";
+import { TagFilters } from "@/constants/filters";
 import paths from "@/constants/paths";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
 import { getAllTags } from "@/lib/actions/tag.action";
 import Link from "next/link";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
-  const tags = await getAllTags({ searchQuery: searchParams.q });
+  const tags = await getAllTags({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
 
   return (
     <>
@@ -24,12 +27,12 @@ const page = async ({ searchParams }: SearchParamsProps) => {
         />
 
         <Filters
-          filters={UserFilters}
+          filters={TagFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>
 
-      <section className="mt-10 flex w-full flex-wrap gap-4 max-xs:min-w-full xs:w-[260px]">
+      <section className="mt-12 flex flex-wrap gap-4">
         {tags.length > 0 ? (
           tags.map((tag) => (
             <Link

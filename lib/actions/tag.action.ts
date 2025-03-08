@@ -4,7 +4,7 @@ import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
 import { FilterQuery } from "mongoose";
 import { connectToDatabase } from "../mongoose";
-import { GetTagById, TopInteractedTags } from "./shared.types";
+import { GetAllTagsProps, GetTagById, TopInteractedTags } from "./shared.types";
 
 export async function getTopInteractedTags(params: TopInteractedTags) {
   try {
@@ -26,18 +26,39 @@ export async function getTopInteractedTags(params: TopInteractedTags) {
   }
 }
 
-export async function getAllTags(params: { searchQuery: string | undefined }) {
+export async function getAllTags(params: GetAllTagsProps) {
   try {
     connectToDatabase();
-    const searchTerm = params.searchQuery;
+    const { searchQuery: searchTerm, filter } = params;
 
-    const query: FilterQuery<typeof Tag> = {};
+    const matchStage: FilterQuery<typeof Tag> = {};
 
     if (searchTerm) {
-      query.$or = [{ name: new RegExp(searchTerm, "i") }];
+      matchStage.$or = [{ name: new RegExp(searchTerm, "i") }];
     }
 
-    return await Tag.find(query);
+    let sortOptions = {};
+    switch (filter) {
+      case "popular":
+        sortOptions = { numQuestions: -1 };
+        break;
+      case "recent":
+        sortOptions = { createdOn: -1 };
+        break;
+      case "name":
+        sortOptions = { name: 1 };
+        break;
+      case "old":
+        sortOptions = { createdOn: 1 };
+        break;
+    }
+
+    // return await Tag.find(query).sort(sortOptions);
+    return await Tag.aggregate([
+      { $match: matchStage },
+      { $addFields: { numQuestions: { $size: "$questions" } } },
+      { $sort: sortOptions },
+    ]);
   } catch (error) {
     console.log(error);
     throw error;

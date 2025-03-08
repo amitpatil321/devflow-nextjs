@@ -9,7 +9,8 @@ import { UserFilters } from "../../../constants/filters";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const allUsers = await getAllUsers({
-    searchQuery: searchParams.q ?? null,
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
 
   return (

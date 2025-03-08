@@ -4,8 +4,8 @@ import { Schema } from "mongoose";
 export interface GetQuestionsProps {
   page?: number;
   pageSize?: number;
-  searchQuery?: string;
-  filter?: string;
+  searchQuery?: string | null;
+  filter?: string | null;
 }
 
 export interface CreateQuestionProps {
@@ -135,6 +135,6 @@ export interface UpdateProfileProps {
 
 export interface SearchParamsProps {
   searchParams: {
-    [key: string]: string | undefined;
+    [key: string]: string | null;
   };
 }

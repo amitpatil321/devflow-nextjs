@@ -95,6 +95,7 @@ export interface SavedQuestionsProps {
   clerkId: string;
   searchQuery?: string | null;
   filter?: string | null;
+  page?: string | null;
 }
 
 export interface ViewQuestionProps {

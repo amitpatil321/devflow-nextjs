@@ -35,7 +35,7 @@ const Pagination = ({ total }: Props) => {
   return (
     totalPages > 1 && (
       <Paging>
-        <PaginationContent>
+        <PaginationContent className="select-none">
           <PaginationItem
             aria-disabled={currentPage <= 1}
             className={

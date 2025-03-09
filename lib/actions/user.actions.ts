@@ -8,7 +8,7 @@ import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import { connectToDatabase } from "../mongoose";
 import {
   CreateUserProps,
@@ -162,7 +162,9 @@ export async function toggeSaveQuestion(params: ToggleSaveQuestionProps) {
 }
 
 export async function getSavedQuestions(params: SavedQuestionsProps) {
-  const { clerkId, searchQuery: searchTerm, filter } = params;
+  const { clerkId, searchQuery: searchTerm, filter, page } = params;
+  const pageNumber = Number(page) || 1;
+
   await connectToDatabase();
 
   try {
@@ -190,7 +192,17 @@ export async function getSavedQuestions(params: SavedQuestionsProps) {
         break;
     }
 
-    const query: FilterQuery<typeof Question> = { _id: { $in: user.saved } };
+    if (!Array.isArray(user.saved) || user.saved.length === 0) {
+      return { questions: [], total: 0 };
+    }
+
+    const savedQuestionIds = user.saved.map(
+      (id: string) => new mongoose.Types.ObjectId(id),
+    );
+
+    const query: FilterQuery<typeof Question> = {
+      _id: { $in: savedQuestionIds },
+    };
 
     if (searchTerm) {
       query.$or = [
@@ -202,9 +214,11 @@ export async function getSavedQuestions(params: SavedQuestionsProps) {
     const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag })
       .populate({ path: "author", model: User })
+      .skip((pageNumber - 1) * ItemsPerPage)
+      .limit(ItemsPerPage)
       .sort(sortOptions);
 
-    return questions;
+    return { questions, total: await Question.countDocuments(query) };
   } catch (error) {
     console.log(error);
     throw error;

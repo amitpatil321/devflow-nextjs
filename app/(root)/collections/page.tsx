@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import Filters from "@/components/shared/Filters";
 import NoResults from "@/components/shared/NoResults";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { QuestionFilters } from "@/constants/filters";
 import paths from "@/constants/paths";
@@ -10,20 +11,22 @@ import { auth } from "@clerk/nextjs/server";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const { userId } = auth();
+  const { q, filter, page } = searchParams;
 
   if (!userId) return null;
 
-  const questions = await getSavedQuestions({
+  const { questions, total } = await getSavedQuestions({
     clerkId: userId,
-    searchQuery: searchParams.q,
-    filter: searchParams.filter,
+    searchQuery: q,
+    filter,
+    page,
   });
 
   return (
     <>
       <h1 className="text-dark100_light900 h1-bold">Saved Questions</h1>
 
-      <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex max-sm:flex-col justify-between sm:items-center gap-5 mt-11">
         <LocalSearch
           route="/"
           iconPosition="left"
@@ -38,7 +41,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
         />
       </div>
 
-      <section className="mt-6 flex w-full flex-col gap-6">
+      <section className="flex flex-col gap-6 mt-6 w-full">
         {questions.length > 0 ? (
           questions.map((question) => (
             <QuestionCard key={question._id} question={question} />
@@ -52,6 +55,10 @@ const page = async ({ searchParams }: SearchParamsProps) => {
           />
         )}
       </section>
+
+      <div className="mt-6">
+        <Pagination total={total} />
+      </div>
     </>
   );
 };

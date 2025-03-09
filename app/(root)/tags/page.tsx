@@ -1,5 +1,6 @@
 import Filters from "@/components/shared/Filters";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { TagFilters } from "@/constants/filters";
 import paths from "@/constants/paths";
@@ -8,16 +9,19 @@ import { getAllTags } from "@/lib/actions/tag.action";
 import Link from "next/link";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
-  const tags = await getAllTags({
-    searchQuery: searchParams.q,
-    filter: searchParams.filter,
+  const { q, filter, page } = searchParams;
+
+  const { tags, total } = await getAllTags({
+    searchQuery: q,
+    filter,
+    page,
   });
 
   return (
     <>
       <h1 className="text-dark100_light900 h1-bold">Tags</h1>
 
-      <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex max-sm:flex-col justify-between sm:items-center gap-5 mt-11">
         <LocalSearch
           route={paths.tags}
           iconPosition="left"
@@ -32,7 +36,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
         />
       </div>
 
-      <section className="mt-12 flex flex-wrap gap-4">
+      <section className="flex flex-wrap gap-4 mt-12">
         {tags.length > 0 ? (
           tags.map((tag) => (
             <Link
@@ -40,15 +44,15 @@ const page = async ({ searchParams }: SearchParamsProps) => {
               key={tag._id}
               className="shadow-light100_darknone"
             >
-              <article className="light-border background-light900_dark200 flex w-full flex-col rounded-2xl border px-8 py-10 sm:w-[260px]">
-                <div className="background-light800_dark400 w-fit rounded-sm px-5 py-1.5">
+              <article className="flex flex-col px-8 py-10 border light-border rounded-2xl w-full sm:w-[260px] background-light900_dark200">
+                <div className="px-5 py-1.5 rounded-sm w-fit background-light800_dark400">
                   <p className="paragraph-semibold text-dark300_light900">
                     {tag.name}
                   </p>
                 </div>
 
-                <p className="text-dark400_light500 small-medium mt-3.5">
-                  <span className="primary-text-gradient body-semibold mr-2.5">
+                <p className="mt-3.5 text-dark400_light500 small-medium">
+                  <span className="mr-2.5 primary-text-gradient body-semibold">
                     {tag.questions.length}+
                   </span>{" "}
                   Questions
@@ -65,6 +69,10 @@ const page = async ({ searchParams }: SearchParamsProps) => {
           />
         )}
       </section>
+
+      <div className="mt-6">
+        <Pagination total={total} />
+      </div>
     </>
   );
 };

@@ -7,7 +7,7 @@ export const themes = [
   { value: "system", label: "System", icon: "/assets/icons/computer.svg" },
 ];
 
-export const ItemsPerPage = 10;
+export const ItemsPerPage = 4;
 
 export const sidebarLinks: SidebarLink[] = [
   {

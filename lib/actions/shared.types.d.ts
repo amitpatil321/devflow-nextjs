@@ -143,4 +143,5 @@ export interface SearchParamsProps {
 export interface GetAllTagsProps {
   searchQuery: string | null;
   filter: string | null;
+  page: string | null;
 }

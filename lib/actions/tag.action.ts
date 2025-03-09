@@ -1,4 +1,5 @@
 "use server";
+import { ItemsPerPage } from "@/constants";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
@@ -29,7 +30,8 @@ export async function getTopInteractedTags(params: TopInteractedTags) {
 export async function getAllTags(params: GetAllTagsProps) {
   try {
     connectToDatabase();
-    const { searchQuery: searchTerm, filter } = params;
+    const { searchQuery: searchTerm, filter, page } = params;
+    const pageNumber = Number(page) || 1;
 
     const matchStage: FilterQuery<typeof Tag> = {};
 
@@ -53,12 +55,27 @@ export async function getAllTags(params: GetAllTagsProps) {
         break;
     }
 
-    // return await Tag.find(query).sort(sortOptions);
-    return await Tag.aggregate([
+    const pipeline: any[] = [
       { $match: matchStage },
       { $addFields: { numQuestions: { $size: "$questions" } } },
-      { $sort: sortOptions },
-    ]);
+    ];
+
+    if (sortOptions && Object.keys(sortOptions).length > 0) {
+      pipeline.push({ $sort: sortOptions });
+    }
+
+    // return await Tag.find(query).sort(sortOptions);
+    // return await Tag.aggregate([
+    //   { $match: matchStage },
+    //   { $addFields: { numQuestions: { $size: "$questions" } } },
+    //   { $sort: sortOptions || {} },
+    // ]);
+
+    const tags = await Tag.aggregate(pipeline)
+      .skip((pageNumber - 1) * ItemsPerPage)
+      .limit(ItemsPerPage);
+    const total = await Tag.countDocuments(pipeline);
+    return { tags, total };
   } catch (error) {
     console.log(error);
     throw error;

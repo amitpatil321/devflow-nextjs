@@ -1,6 +1,7 @@
 import UserCard from "@/components/cards/UserCard";
 import Filters from "@/components/shared/Filters";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import paths from "@/constants/paths";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
@@ -8,16 +9,19 @@ import { getAllUsers } from "@/lib/actions/user.actions";
 import { UserFilters } from "../../../constants/filters";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
-  const allUsers = await getAllUsers({
-    searchQuery: searchParams.q,
-    filter: searchParams.filter,
+  const { q, filter, page } = searchParams;
+
+  const { users, total } = await getAllUsers({
+    searchQuery: q,
+    filter,
+    page,
   });
 
   return (
     <>
       <h1 className="text-dark100_light900 h1-bold">All Users</h1>
 
-      <div className="mt-10 flex justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex max-sm:flex-col justify-between sm:items-center gap-5 mt-10">
         <LocalSearch
           route={paths.community}
           iconPosition="left"
@@ -32,9 +36,9 @@ const page = async ({ searchParams }: SearchParamsProps) => {
         />
       </div>
 
-      <section className="mt-10 flex flex-wrap gap-4">
-        {allUsers?.length > 0 ? (
-          allUsers.map((user) => <UserCard key={user._id} user={user} />)
+      <section className="flex flex-wrap gap-4 mt-10">
+        {users?.length > 0 ? (
+          users.map((user: any) => <UserCard key={user._id} user={user} />)
         ) : (
           <NoResult
             title="No Users Found"
@@ -44,6 +48,10 @@ const page = async ({ searchParams }: SearchParamsProps) => {
           />
         )}
       </section>
+
+      <div className="mt-6">
+        <Pagination total={total} />
+      </div>
     </>
   );
 };

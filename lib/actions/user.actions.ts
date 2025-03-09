@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { ItemsPerPage } from "@/constants";
 import paths from "@/constants/paths";
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
@@ -25,13 +26,15 @@ import {
 interface GetAllUsersProps {
   searchQuery: string | null;
   filter: string | null;
+  page: string | null;
 }
 
 export async function getAllUsers(params: GetAllUsersProps) {
   try {
     connectToDatabase();
-    const { searchQuery: searchTerm, filter } = params;
+    const { searchQuery: searchTerm, filter, page } = params;
     const query: FilterQuery<typeof User> = {};
+    const pageNumber = Number(page) || 1;
 
     if (searchTerm) {
       query.$or = [
@@ -53,7 +56,11 @@ export async function getAllUsers(params: GetAllUsersProps) {
         break;
     }
 
-    return await User.find(query).sort(sortOptions);
+    const users = await User.find(query)
+      .sort(sortOptions)
+      .skip((pageNumber - 1) * ItemsPerPage)
+      .limit(ItemsPerPage);
+    return { users, total: await User.countDocuments() };
   } catch (error) {
     console.log(error);
     throw error;

@@ -40,7 +40,7 @@ const Pagination = ({ total }: Props) => {
             aria-disabled={currentPage <= 1}
             className={
               currentPage <= 1
-                ? "pointer-events-none text-gray-300"
+                ? "pointer-events-none text-gray-400"
                 : "cursor-pointer"
             }
             onClick={() => handlePageChange(currentPage - 1)}

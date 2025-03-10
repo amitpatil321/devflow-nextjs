@@ -1,5 +1,6 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import NoResults from "@/components/shared/NoResults";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import paths from "@/constants/paths";
 import { questionsBytagId } from "@/lib/actions/tag.action";
@@ -8,11 +9,16 @@ interface TagProps {
   params: {
     id: string;
   };
+  searchParams: {
+    page: string;
+  };
 }
 
-const page = async ({ params }: TagProps) => {
-  const response = await questionsBytagId({
+const page = async ({ params, searchParams }: TagProps) => {
+  const { page } = searchParams;
+  const { response, total } = await questionsBytagId({
     tagId: params.id,
+    page,
   });
 
   return (
@@ -29,7 +35,7 @@ const page = async ({ params }: TagProps) => {
         />
       </div>
 
-      <section className="mt-6 flex w-full flex-col gap-6">
+      <section className="flex flex-col gap-6 mt-6 w-full">
         {response.questions.length > 0 ? (
           response.questions.map((question: any) => (
             <QuestionCard key={question._id} question={question} />
@@ -45,6 +51,10 @@ const page = async ({ params }: TagProps) => {
           />
         )}
       </section>
+
+      <div className="mt-6">
+        <Pagination total={total} />
+      </div>
     </>
   );
 };

@@ -85,9 +85,10 @@ export async function getAllTags(params: GetAllTagsProps) {
 export async function questionsBytagId(params: GetTagById) {
   try {
     connectToDatabase();
-    const { tagId } = params;
+    const { tagId, page } = params;
+    const pageNumber = Number(page) || 1;
 
-    const questions = await Tag.findById(tagId).populate({
+    const response = await Tag.findById(tagId).populate({
       path: "questions",
       model: Question,
       select: "_id title upvotes downvotes answers tags author views createdAt",
@@ -103,8 +104,16 @@ export async function questionsBytagId(params: GetTagById) {
           select: "_id name picture",
         },
       ],
+      options: {
+        sort: { createdAt: -1 },
+        skip: (pageNumber - 1) * ItemsPerPage,
+        limit: ItemsPerPage,
+      },
     });
-    return questions;
+
+    const totalResponse = await Tag.findById(tagId);
+
+    return { response, total: totalResponse.questions.length };
   } catch (error) {
     console.log(error);
     throw error;

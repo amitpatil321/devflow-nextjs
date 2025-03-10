@@ -35,6 +35,8 @@ const AnswerCard = ({ answer, clerkId }: AnswerCardProps) => {
   const { _id, question, author, upvotes, createdOn } = answer;
   const isAuthor = author.clerkId === clerkId;
 
+  console.log(answer.question.title);
+
   return (
     <div className="p-9 sm:px-11 rounded-[10px] card-wrapper">
       <div className="flex sm:flex-row flex-col-reverse justify-between items-start gap-5">
@@ -42,7 +44,7 @@ const AnswerCard = ({ answer, clerkId }: AnswerCardProps) => {
           <span className="sm:hidden flex text-dark400_light700 line-clamp-1 subtle-regular">
             {timeAgo(createdOn)}
           </span>
-          <Link href={`${paths.question}/${_id}`}>
+          <Link href={`${paths.question}/${question._id}`}>
             <h3 className="flex-1 text-dark200_light900 line-clamp-1 sm:h3-semibold base-semibold">
               {question.title}
             </h3>

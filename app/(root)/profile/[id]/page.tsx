@@ -15,9 +15,10 @@ interface PageProps {
   params: {
     id: string;
   };
+  searchParams: { [key: string]: string | null };
 }
 
-const page = async ({ params }: PageProps) => {
+const page = async ({ params, searchParams }: PageProps) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });
 
@@ -106,14 +107,14 @@ const page = async ({ params }: PageProps) => {
             className="flex flex-col gap-6 mt-5 w-full"
           >
             <QuestionTab
-              // searchParams={searchParams}
+              searchParams={searchParams}
               userId={userInfo.user._id}
               clerkId={clerkId}
             />
           </TabsContent>
           <TabsContent value="answers" className="flex flex-col gap-6 w-full">
             <AnswersTab
-              // searchParams={searchParams}
+              searchParams={searchParams}
               userId={userInfo.user._id}
               clerkId={clerkId}
             />

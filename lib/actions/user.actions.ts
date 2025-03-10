@@ -246,7 +246,11 @@ export async function getUserInfo(params: UserInfoProps) {
 
 export async function getUserQuestions(params: UserQuestionsProps) {
   try {
-    const { userId } = params;
+    const { userId, page } = params;
+    const pageNumber = Number(page) || 1;
+
+    await connectToDatabase();
+
     const userQuestions = await Question.find({ author: userId })
       .sort({
         views: -1,
@@ -257,8 +261,13 @@ export async function getUserQuestions(params: UserQuestionsProps) {
         path: "author",
         model: User,
         select: "_id clerkId name picture",
-      });
-    return userQuestions;
+      })
+      .skip((pageNumber - 1) * ItemsPerPage)
+      .limit(ItemsPerPage);
+    return {
+      userQuestions,
+      total: await Question.countDocuments({ author: userId }),
+    };
   } catch (error) {
     console.log(error);
     throw error;
@@ -267,7 +276,9 @@ export async function getUserQuestions(params: UserQuestionsProps) {
 
 export async function getUserAnswers(params: UserAnswersProps) {
   try {
-    const { userId } = params;
+    const { userId, page } = params;
+    const pageNumber = Number(page) || 1;
+
     const userAnswers = await Answer.find({ author: userId })
       .sort({
         upvotes: -1,
@@ -277,8 +288,14 @@ export async function getUserAnswers(params: UserAnswersProps) {
         path: "author",
         model: User,
         select: "_id clerkId name picture",
-      });
-    return userAnswers;
+      })
+      .skip((pageNumber - 1) * ItemsPerPage)
+      .limit(ItemsPerPage);
+
+    return {
+      userAnswers,
+      total: await Answer.countDocuments({ author: userId }),
+    };
   } catch (error) {
     console.log(error);
     throw error;

@@ -109,10 +109,12 @@ export interface UserInfoProps {
 
 export interface UserQuestionsProps {
   userId: string;
+  page: string | null;
 }
 
 export interface UserAnswersProps {
   userId: string;
+  page: string | null;
 }
 
 export interface DeleteQuestionProps {

@@ -2,20 +2,17 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import paths from "./constants/paths";
 
 const isProtectedRoute = createRouteMatcher([
-  `${paths.collections}(.*)`,
-  `${paths.askQuestion}(.*)`,
   `${paths.signIn}(.*)`,
+  `${paths.signUp}(.*)`,
+  `${paths.profile}(.*)`,
+  `${paths.askQuestion}(.*)`,
+  `${paths.collections}(.*)`,
 ]);
 
-export default clerkMiddleware((auth, req) => {
-  // try {
-  if (isProtectedRoute(req)) {
-    auth().protect();
+export default clerkMiddleware(async (auth, request) => {
+  if (isProtectedRoute(request)) {
+    await auth().protect();
   }
-  // } catch (error) {
-  //   console.error('Authentication Error:', error);
-  //   // return NextResponse.redirect(req.nextUrl.origin+pages?.home+'?error=Unexpected error while logging in');
-  // }
 });
 
 export const config = {

@@ -17,7 +17,7 @@ const page = async () => {
     <div>
       <h1 className="text-dark100_light900 h1-bold">Ask a Question</h1>
       <div className="mt-9">
-        <Question userId={JSON.stringify(mongoUser?._id)} />
+        <Question type="create" userId={JSON.stringify(mongoUser?._id)} />
       </div>
     </div>
   );

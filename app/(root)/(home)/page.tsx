@@ -24,7 +24,6 @@ const page = async ({ searchParams }: SearchParamsProps) => {
     <>
       <div className="flex sm:flex-row flex-col-reverse justify-between sm:items-center gap-4 w-full">
         <h1 className="text-dark100_light900 h1-bold">All Questions</h1>
-
         <Link
           href={`${paths.askQuestion}`}
           className="flex justify-end max-sm:w-full"

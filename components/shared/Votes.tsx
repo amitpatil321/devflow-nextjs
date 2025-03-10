@@ -39,7 +39,7 @@ const Votes = ({
   useEffect(() => {
     viewQuestion({
       questionId: JSON.parse(itemId),
-      userId: JSON.parse(userId),
+      userId: userId ? JSON.parse(userId) : undefined,
     });
   }, [itemId, userId, pathname, router]);
 
@@ -84,7 +84,7 @@ const Votes = ({
 
   return (
     <div className="flex gap-5">
-      <div className="flex-end flex gap-4">
+      <div className="flex flex-end gap-4">
         <div className="flex items-center gap-1">
           <Image
             src={`/assets/icons/${hasUpvoted ? "upvoted.svg" : "upvote.svg"}`}
@@ -94,7 +94,7 @@ const Votes = ({
             className="cursor-pointer"
             onClick={() => handleVote("upvote")}
           />
-          <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+          <div className="flex-center p-1 rounded-sm min-w-[18px] background-light700_dark400">
             <p>{formatNumber(upvotes)}</p>
           </div>
         </div>
@@ -107,7 +107,7 @@ const Votes = ({
             className="cursor-pointer"
             onClick={() => handleVote("downvote")}
           />
-          <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+          <div className="flex-center p-1 rounded-sm min-w-[18px] background-light700_dark400">
             <p>{formatNumber(downvotes)}</p>
           </div>
         </div>

@@ -130,7 +130,8 @@ export async function getQuestionById(params: GetQuestionDetailsProps) {
         path: "author",
         model: User,
         select: "_id clerkId name picture",
-      });
+      })
+      .lean();
 
     if (!question) {
       throw new Error("Question not found");

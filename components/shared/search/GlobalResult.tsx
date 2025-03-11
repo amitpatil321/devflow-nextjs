@@ -1,4 +1,6 @@
+import paths from "@/constants/paths";
 import { globalSearch } from "@/lib/actions/general.action";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -7,27 +9,27 @@ import GlobalFilters from "./GlobalFilters";
 
 const GlobalResult = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<Record<
+    string,
+    {
+      _id?: string;
+      id?: string;
+      title?: string;
+      name?: string;
+      content?: string;
+      type?: string;
+    }[]
+  > | null>(null);
   const searchParams = useSearchParams();
-  //   const [result] = useState(false);
 
   const searchTerm = searchParams.get("global");
   const type = searchParams.get("type");
-
-  // let result = [
-  //   { type: "question", id: 1, title: "I am question 1" },
-  //   { type: "question", id: 2, title: "I am question 2" },
-  //   { type: "question", id: 3, title: "I am question 3" },
-  //   { type: "tag", id: 1, title: "react" },
-  //   { type: "tag", id: 2, title: "python" },
-  //   { type: "user", id: 1, title: "devamit" },
-  //   { type: "answer", id: 1, title: "This is answer" },
-  // ];
-
-  // let filtered;
-  // if (type) {
-  //   filtered = Object.values(result).filter((each) => each.type === type);
-  // } else filtered = [...result];
+  const icons = {
+    question: "/assets/icons/question.svg",
+    answer: "/assets/icons/Untitled.svg",
+    user: "/assets/icons/user.svg",
+    tag: "/assets/icons/tag.svg",
+  };
 
   useEffect(() => {
     if (!searchTerm) return;
@@ -35,14 +37,13 @@ const GlobalResult = () => {
     const fetchResults = async () => {
       setIsLoading(true);
       setResults(null);
-      console.log("inside");
       try {
-        console.log("inside try");
         const result = await globalSearch({
           query: searchTerm,
-          type: "question",
+          type,
         });
-        console.log("result", result);
+
+        setResults(result);
       } catch (error) {
         console.error(error);
         throw error;
@@ -54,7 +55,22 @@ const GlobalResult = () => {
     if (searchTerm) fetchResults();
   }, [searchTerm, type]);
 
-  const filtered = {};
+  const buildUrl = (id: string, type: string) => {
+    if (type === "question") {
+      return `${paths.question}/${id}`;
+    } else if (type === "answer") {
+      return `${paths.question}/${id}`;
+    } else if (type === "user") {
+      return `${paths.profile}/${id}`;
+    } else if (type === "tag") {
+      return `${paths.tags}/${id}`;
+    }
+    return "/";
+  };
+
+  const isAllEmpty = Object.values(results || {}).every(
+    (arr) => arr.length === 0,
+  );
 
   return (
     <div className="top-full left-0 z-10 absolute bg-light-800 dark:bg-dark-400 shadow-sm mt-3 py-5 rounded-xl w-full">
@@ -68,46 +84,57 @@ const GlobalResult = () => {
 
         {isLoading ? (
           <div className="flex-col flex-center px-5">
-            {/* <ReloadIcon className="my-2 w-10 h-10 text-primary-500 animate-spin" /> */}
+            <ReloadIcon className="my-2 w-10 h-10 text-primary-500 animate-spin" />
             <p className="text-dark200_light800 body-regular">
               Browsing the entire database
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
-            {filtered.length > 0 ? (
-              filtered.map((item: any, index: number) => (
-                <Link
-                  href={"/"}
-                  //   href={renderLink(item.type, item.id)}
-                  key={item.type + item.id + index}
-                  className="flex items-start gap-3 hover:bg-light-700/50 dark:bg-dark-500/50 px-5 py-2.5 w-full cursor-pointer"
-                >
-                  <Image
-                    src="/assets/icons/tag.svg"
-                    alt="tags"
-                    width={18}
-                    height={18}
-                    className="invert-colors mt-1 object-contain"
-                  />
+          <div className="flex flex-col gap-2 max-h-96 overflow-y-auto">
+            <div className="flex flex-col gap-2">
+              {!isAllEmpty ? (
+                Object.values(results ?? []).map((items: any, index: number) =>
+                  items.length > 0
+                    ? items.map((item: any) => {
+                        return (
+                          <Link
+                            href={buildUrl(item.id, item.type)}
+                            key={item.type + item.id + index}
+                            className="flex items-start gap-3 hover:bg-light-700/50 dark:hover:bg-dark-500/50 px-5 py-2.5 w-full cursor-pointer"
+                          >
+                            <Image
+                              src={
+                                icons[item.type as keyof typeof icons] ??
+                                "/assets/icons/tag.svg"
+                              }
+                              alt="tags"
+                              width={18}
+                              height={18}
+                              className="invert-colors mt-1 object-contain"
+                            />
 
-                  <div className="flex flex-col">
-                    <p className="text-dark200_light800 line-clamp-1 body-medium">
-                      {item.title}
-                    </p>
-                    <p className="mt-1 font-bold text-light400_light500 capitalize small-medium">
-                      {item.type}
-                    </p>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <div className="flex-col flex-center px-5">
-                <p className="px-5 py-2.5 text-dark200_light800 body-regular">
-                  Oops, no results found
-                </p>
-              </div>
-            )}
+                            <div className="flex flex-col">
+                              <p className="text-dark200_light800 line-clamp-1 body-medium">
+                                {item.title}
+                              </p>
+                              <p className="mt-1 font-bold text-light400_light500 capitalize small-medium">
+                                {item.type}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })
+                    : null,
+                )
+              ) : (
+                <div className="flex-col flex-center px-5">
+                  <p className="px-5 py-2.5 text-dark200_light800 text-center body-regular">
+                    <p className="text-5xl">🫣</p>
+                    Oops, no results found
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

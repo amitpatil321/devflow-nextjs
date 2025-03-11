@@ -30,11 +30,11 @@ const LocalSearch = ({
       router.push(updatedUrl, { scroll: false });
     }, 300);
     return () => clearTimeout(debounce);
-  }, [searchTerm]);
+  }, [searchTerm, router]);
 
   return (
-    <div className="bg-light flex min-h-[56px] w-full grow flex-row items-center rounded-xl bg-light-800 px-4 py-2 dark:bg-dark-400">
-      {iconPosition == "left" && (
+    <div className="flex flex-row items-center bg-light bg-light-800 dark:bg-dark-400 px-4 py-2 rounded-xl w-full min-h-[56px] grow">
+      {iconPosition === "left" && (
         <Image
           src={imgSrc}
           alt="search icon"
@@ -47,10 +47,10 @@ const LocalSearch = ({
         type="text"
         value={searchTerm}
         placeholder={placeholder}
-        className={`no-focus placeholder border-none bg-transparent text-[16px] shadow-none outline-none dark:border-none dark:bg-dark-400 ${otherClasses}`}
+        className={`no-focus placeholder paragraph-regular border-none bg-transparent text-[16px] shadow-none outline-none dark:border-none dark:bg-dark-400 ${otherClasses}`}
         onChange={(event) => setSearchTerm(event.target.value)}
       />
-      {iconPosition == "right" && (
+      {iconPosition === "right" && (
         <Image
           src={imgSrc}
           alt="search icon"

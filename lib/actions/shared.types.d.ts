@@ -148,3 +148,8 @@ export interface GetAllTagsProps {
   filter: string | null;
   page: string | null;
 }
+
+export interface GlobalSearchProps {
+  query: string | null;
+  type: string | null;
+}

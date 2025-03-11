@@ -9,7 +9,7 @@ export const AskQuestionSchema = z.object({
 export const AnswerScheme = z.object({
   answer: z
     .string()
-    .min(100, { message: "Answer must contain at least 100 characters" })
+    .min(50, { message: "Answer must contain at least 500 characters" })
     .max(10000),
 });
 

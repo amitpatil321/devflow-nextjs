@@ -35,8 +35,6 @@ const AnswerCard = ({ answer, clerkId }: AnswerCardProps) => {
   const { _id, question, author, upvotes, createdOn } = answer;
   const isAuthor = author.clerkId === clerkId;
 
-  console.log(answer.question.title);
-
   return (
     <div className="p-9 sm:px-11 rounded-[10px] card-wrapper">
       <div className="flex sm:flex-row flex-col-reverse justify-between items-start gap-5">

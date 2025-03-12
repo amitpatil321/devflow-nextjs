@@ -27,7 +27,6 @@ const GlobalSearch = () => {
         searchRef.current &&
         !searchRef.current.contains(event.target as Node)
       ) {
-        console.log("inside");
         setOpen(false);
         setSearchText("");
         const url = removeKeys(["global", "type"]);

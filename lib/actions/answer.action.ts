@@ -56,8 +56,6 @@ export async function upvoteAnswer(params: AnswerVoteProps) {
   try {
     connectToDatabase();
 
-    console.log("upvoteAnswer :", params.itemId);
-
     const { itemId, userId, hasUpvoted, hasDownvoted, path } = params;
     let updateQuery = {};
     if (hasUpvoted) {

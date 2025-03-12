@@ -18,7 +18,7 @@ export async function viewQuestion(params: ViewQuestionProps) {
         question: questionId,
       });
 
-      if (existingInteraction) console.log(`Interaction exists`);
+      if (existingInteraction) console.log("Interaction exists");
 
       await Interaction.create({
         user: userId,

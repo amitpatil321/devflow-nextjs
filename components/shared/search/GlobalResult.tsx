@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import GlobalFilters from "./GlobalFilters";
 
 const GlobalResult = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState<Record<
     string,
     {
@@ -22,7 +22,7 @@ const GlobalResult = () => {
   > | null>(null);
   const searchParams = useSearchParams();
 
-  const searchTerm = searchParams.get("global");
+  const global = searchParams.get("global");
   const type = searchParams.get("type");
   const icons = {
     question: "/assets/icons/question.svg",
@@ -32,30 +32,27 @@ const GlobalResult = () => {
   };
 
   useEffect(() => {
-    if (!searchTerm) return;
+    if (!global) return;
+    setIsLoading(true);
 
     const fetchResults = async () => {
-      setIsLoading(true);
       setResults(null);
       try {
         const result = await globalSearch({
-          query: searchTerm,
+          query: global,
           type,
         });
 
         setResults(result);
-      } catch (error) {
-        console.error(error);
-        throw error;
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (searchTerm) fetchResults();
-  }, [searchTerm, type]);
+    if (global) fetchResults();
+  }, [global, type]);
 
-  const buildUrl = (id: string, type: string) => {
+  const buildUrl = (id: string, type: string): string => {
     if (type === "question") {
       return `${paths.question}/${id}`;
     } else if (type === "answer") {

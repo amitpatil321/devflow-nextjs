@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { makeUrl } from "@/lib/utils";
+import { makeUrl, removeKeys } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -48,7 +48,12 @@ const LocalSearch = ({
         value={searchTerm}
         placeholder={placeholder}
         className={`no-focus placeholder paragraph-regular border-none bg-transparent text-[16px] shadow-none outline-none dark:border-none dark:bg-dark-400 ${otherClasses}`}
-        onChange={(event) => setSearchTerm(event.target.value)}
+        onChange={(event) => {
+          if (event.target.value !== searchTerm) {
+            router.push(removeKeys(["page"]), { scroll: false });
+          }
+          setSearchTerm(event.target.value);
+        }}
       />
       {iconPosition === "right" && (
         <Image

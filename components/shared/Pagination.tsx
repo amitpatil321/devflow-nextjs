@@ -10,7 +10,7 @@ import {
 import { ItemsPerPage } from "@/constants";
 import { makeUrl } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   total: number;
@@ -23,6 +23,7 @@ const Pagination = ({ total }: Props) => {
   const [currentPage, setCurrentPage] = useState<number>(
     Number(searchParams.get("page")) || 1,
   );
+
   const totalPages = Math.ceil(total / ItemsPerPage);
   const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
 
@@ -31,6 +32,10 @@ const Pagination = ({ total }: Props) => {
     const url = makeUrl("page", pageNumber.toString());
     router.push(url);
   };
+
+  useEffect(() => {
+    if (!searchParams.has("page")) setCurrentPage(1);
+  }, [searchParams]);
 
   return (
     totalPages > 1 && (

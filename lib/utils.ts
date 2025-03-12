@@ -72,3 +72,20 @@ export const makeUrl = (key: string, value: string | null) => {
   else delete url[key];
   return `?${queryString.stringify(url, { skipNull: true, skipEmptyString: true })}`;
 };
+
+export const removeKeys = (keys: string[]) => {
+  const urlParams = queryString.parse(location.search);
+
+  keys.forEach((key) => {
+    delete urlParams[key];
+  });
+
+  const newQueryString = queryString.stringify(urlParams, {
+    skipNull: true,
+    skipEmptyString: true,
+  });
+
+  return newQueryString
+    ? `${location.pathname}?${newQueryString}`
+    : location.pathname;
+};

@@ -12,7 +12,7 @@ const LeftSidebar = () => {
   const pathname = usePathname();
   const { userId } = useAuth();
   return (
-    <section className="custom-scrollbar light-border background-light900_dark200 sticky left-0 top-0 flex h-screen w-fit flex-col justify-between overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">
+    <section className="max-sm:hidden top-0 left-0 sticky flex flex-col justify-between shadow-light-300 dark:shadow-none custom-scrollbar p-6 pt-36 light-border border-r w-fit lg:w-[266px] h-screen overflow-y-auto select-none background-light900_dark200">
       {sidebarLinks?.map((item) => {
         const isActive =
           (pathname.includes(item.route) && item.route.length > 1) ||
@@ -37,7 +37,7 @@ const LeftSidebar = () => {
               height={20}
               className={`${isActive ? "" : "invert-colors"}`}
             />
-            <span className="dark:text-white max-lg:hidden">{item?.label}</span>
+            <span className="max-lg:hidden dark:text-white">{item?.label}</span>
           </Link>
         );
       })}
@@ -47,28 +47,28 @@ const LeftSidebar = () => {
       <SignedOut>
         <div className="flex flex-col gap-3">
           <Link href={`${paths.signIn}`}>
-            <Button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none">
+            <Button className="shadow-none px-4 py-3 rounded-lg w-full min-h-[41px] small-medium btn-secondary">
               <Image
                 src="/assets/icons/account.svg"
                 alt="login"
                 width={20}
                 height={20}
-                className="invert-colors lg:hidden"
+                className="lg:hidden invert-colors"
               />
-              <span className="primary-text-gradient max-lg:hidden">
+              <span className="max-lg:hidden primary-text-gradient">
                 Log In
               </span>
             </Button>
           </Link>
 
           <Link href={`${paths.signUp}`}>
-            <Button className="light-border-2 text-dark400_light900 small-medium btn-tertiary min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
+            <Button className="shadow-none px-4 py-3 border light-border-2 rounded-lg w-full min-h-[41px] text-dark400_light900 small-medium btn-tertiary">
               <Image
                 src="/assets/icons/sign-up.svg"
                 alt="sign up"
                 width={20}
                 height={20}
-                className="invert-colors lg:hidden"
+                className="lg:hidden invert-colors"
               />
               <span className="max-lg:hidden">Sign up</span>
             </Button>

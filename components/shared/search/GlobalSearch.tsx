@@ -1,41 +1,37 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { makeUrl } from "@/lib/utils";
+import { makeUrl, removeKeys } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import GlobalResult from "./GlobalResult";
 
 const GlobalSearch = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const pathname = usePathname();
-  const popupRef = useRef<HTMLDivElement>(null);
-
   const [open, setOpen] = useState(false);
-  const [searchText, setSearchText] = useState<string>(
-    searchParams.get("global") || "",
-  );
+  const [searchText, setSearchText] = useState("");
+  const searchRef = useRef<HTMLDivElement>(null);
 
+  // pass search text to url
   useEffect(() => {
-    const debounce = setTimeout(() => {
+    if (searchText) {
       const url = makeUrl("global", searchText);
-      router.push(url, { scroll: false });
-    }, 200);
-    return () => clearTimeout(debounce);
-  }, [searchText, searchParams, router, open]);
-
-  useEffect(() => setOpen(false), [pathname]);
+      router.push(url);
+    }
+  }, [searchText]);
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
+    const handleOutsideClick = (event: MouseEvent): any => {
       if (
-        popupRef.current &&
-        !popupRef.current.contains(event.target as Node)
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
       ) {
+        console.log("inside");
         setOpen(false);
         setSearchText("");
+        const url = removeKeys(["global", "type"]);
+        router.push(url, { scroll: false });
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
@@ -43,7 +39,10 @@ const GlobalSearch = () => {
   }, []);
 
   return (
-    <div className="max-lg:hidden relative w-full max-w-[600px]" ref={popupRef}>
+    <div
+      className="max-lg:hidden relative w-full max-w-[600px]"
+      ref={searchRef}
+    >
       <div className="relative flex items-center gap-1 px-4 rounded-xl min-h-[56px] background-light800_darkgradient grow">
         <Image
           src="/assets/icons/search.svg"

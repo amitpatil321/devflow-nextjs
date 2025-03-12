@@ -56,7 +56,7 @@ export async function getQuestions(params: GetQuestionsProps) {
       .limit(ItemsPerPage)
       .sort(sortOptions);
 
-    return { questions, total: await Question.countDocuments() };
+    return { questions, total: await Question.countDocuments(query) };
   } catch (error) {
     console.log(error);
     throw error;

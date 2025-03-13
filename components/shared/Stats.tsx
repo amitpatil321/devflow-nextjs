@@ -23,14 +23,16 @@ const StatsCard = ({ imgUrl, value, title }: StatsCardProps) => {
 interface Props {
   totalQuestions: number;
   totalAnswers: number;
-  badges?: BadgeCounts;
-  reputation?: number;
+  badges: BadgeCounts;
+  reputation: number;
 }
 
-const Stats = ({ totalQuestions, totalAnswers }: Props) => {
+const Stats = ({ totalQuestions, totalAnswers, reputation, badges }: Props) => {
   return (
     <div className="mt-10">
-      <h4 className="text-dark200_light900 h3-semibold">Stats</h4>
+      <h4 className="text-dark200_light900 h3-semibold">
+        Stats {reputation ? `- ${reputation}` : ""}
+      </h4>
 
       <div className="gap-5 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 mt-5">
         <div className="flex flex-wrap justify-start items-left gap-4 shadow-light-300 dark:shadow-dark-200 p-6 border light-border rounded-md background-light900_dark300">
@@ -50,19 +52,19 @@ const Stats = ({ totalQuestions, totalAnswers }: Props) => {
 
         <StatsCard
           imgUrl="/assets/icons/gold-medal.svg"
-          value={0}
+          value={badges.GOLD}
           title="Gold Badges"
         />
 
         <StatsCard
           imgUrl="/assets/icons/silver-medal.svg"
-          value={0}
+          value={badges?.SILVER}
           title="Silver Badges"
         />
 
         <StatsCard
           imgUrl="/assets/icons/bronze-medal.svg"
-          value={0}
+          value={badges?.BRONZE}
           title="Bronze Badges"
         />
       </div>

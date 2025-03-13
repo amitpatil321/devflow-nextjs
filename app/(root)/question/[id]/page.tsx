@@ -12,6 +12,7 @@ import { getUserById } from "@/lib/actions/user.actions";
 import { formatNumber, timeAgo } from "@/lib/utils";
 import { TagProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
+import { ObjectId } from "mongoose";
 
 interface Props {
   params: {
@@ -19,12 +20,29 @@ interface Props {
   };
 }
 
+interface QuestionType {
+  _id: ObjectId;
+  title: string;
+  content: string;
+  author: any;
+  tags: TagProps[];
+  upvotes: ObjectId[];
+  downvotes: ObjectId[];
+  answers: ObjectId[];
+  views: number;
+  createdAt: Date;
+}
+
 const page = async ({ params }: Props) => {
   const { userId } = await auth();
 
   // if (!userId) redirect(paths.signIn);
-  let loggedUser;
+  let loggedUser: any;
   if (userId) loggedUser = await getUserById({ userId });
+
+  const question = (await getQuestionById({
+    questionId: params.id,
+  })) as unknown as QuestionType;
 
   const {
     _id,
@@ -37,7 +55,7 @@ const page = async ({ params }: Props) => {
     answers,
     views,
     createdAt,
-  } = await getQuestionById({ questionId: params.id });
+  } = question;
 
   return (
     <>
@@ -64,10 +82,16 @@ const page = async ({ params }: Props) => {
               itemId={JSON.stringify(_id)}
               userId={JSON.stringify(loggedUser?._id)}
               upvotes={upvotes.length}
-              hasUpvoted={upvotes.includes(loggedUser?._id)}
+              hasUpvoted={upvotes.some(
+                (id: ObjectId) => id.toString() === loggedUser?._id.toString(),
+              )}
               downvotes={downvotes.length}
-              hasDownvoted={downvotes.includes(loggedUser?._id)}
-              hasSaved={loggedUser?.saved?.includes(_id)}
+              hasDownvoted={downvotes.some(
+                (id: ObjectId) => id.toString() === loggedUser?._id.toString(),
+              )}
+              hasSaved={loggedUser?.saved?.some(
+                (id: string) => id.toString() === _id.toString(),
+              )}
             />
           </div>
         </div>
@@ -109,7 +133,7 @@ const page = async ({ params }: Props) => {
         ))}
       </div>
 
-      <ListAnswers questionId={_id} loggedUser={loggedUser?._id} />
+      <ListAnswers questionId={_id.toString()} loggedUser={loggedUser} />
 
       <div className="mt-8">
         <Answer

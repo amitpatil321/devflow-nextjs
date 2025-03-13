@@ -23,9 +23,19 @@ export async function createAnswer(params: CreateAnswerProps) {
     });
 
     // push answer id to the answeres list of the question
-    await Question.findByIdAndUpdate(questionId, {
+    const questionObj = await Question.findByIdAndUpdate(questionId, {
       $push: { answers: newAnswer._id },
     });
+
+    await Interaction.create({
+      user: authorId,
+      action: "answer",
+      question: questionId,
+      answer: newAnswer._id,
+      tags: questionObj.tags,
+    });
+
+    await User.findByIdAndUpdate(authorId, { $inc: { reputation: 10 } });
 
     revalidatePath(path);
   } catch (error) {
@@ -73,6 +83,14 @@ export async function upvoteAnswer(params: AnswerVoteProps) {
       new: true,
     });
 
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasUpvoted ? -2 : 2 },
+    });
+
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasUpvoted ? -10 : 10 },
+    });
+
     if (!answer) throw new Error("Answer not found");
 
     revalidatePath(path);
@@ -102,6 +120,14 @@ export async function downvoteAnswer(params: AnswerVoteProps) {
     });
 
     if (!answer) throw new Error("Answer not found");
+
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasDownvoted ? -2 : 2 },
+    });
+
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasDownvoted ? -10 : 10 },
+    });
 
     revalidatePath(path);
   } catch (error) {

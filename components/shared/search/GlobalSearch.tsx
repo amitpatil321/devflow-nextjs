@@ -3,12 +3,13 @@ import { Input } from "@/components/ui/input";
 import { makeUrl, removeKeys } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import GlobalResult from "./GlobalResult";
 
 const GlobalSearch = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,11 @@ const GlobalSearch = () => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
+  useEffect(() => {
+    setOpen(false);
+    setSearchText("");
+  }, [pathname]);
 
   return (
     <div

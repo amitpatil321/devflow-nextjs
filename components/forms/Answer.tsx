@@ -1,5 +1,6 @@
 "use client";
 
+import { CHATGPT } from "@/constants";
 import { useTheme } from "@/context/ThemeProvider";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerScheme } from "@/lib/validations";
@@ -27,6 +28,7 @@ interface AnswerProps {
 
 const Answer = ({ question, questionId, authorId }: AnswerProps) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { theme } = useTheme();
   const pathname = usePathname();
   const editorRef = useRef<Editor | null>(null);
@@ -62,13 +64,52 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
     }
   };
 
+  const parseCodeBlocks = (text: string) => {
+    return text.replace(/```(\w+)?\n([\s\S]+?)```/g, (match, lang, code) => {
+      const language = lang || "plaintext";
+      return `<pre><code class="language-${language}">${escapeHTML(code)}</code></pre>`;
+    });
+  };
+
+  const escapeHTML = (str: string) => {
+    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+
+  const generateAIAnswer = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/${CHATGPT}`,
+        {
+          method: "post",
+          body: JSON.stringify({ question }),
+        },
+      );
+      const AIresponse: { success: string; data: any } = await response.json();
+      if (AIresponse.success) {
+        if (editorRef.current) {
+          const editor = editorRef.current as any;
+          const formattedResponse = parseCodeBlocks(AIresponse.data);
+          editor.setContent(formattedResponse);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
-      <div className="mb-3 flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+      <div className="flex sm:flex-row flex-col justify-between sm:items-center gap-5 sm:gap-2 mb-3">
         <h4 className="paragraph-semibold text-dark400_light800">
           Write your answer here
         </h4>
-        <Button className="light-border-2 btn dark: gap-1.5 rounded-md px-4 text-primary-500 shadow-none">
+        <Button
+          className="gap-1.5 shadow-none px-4 light-border-2 rounded-md text-primary-500 btn dark:"
+          onClick={() => generateAIAnswer()}
+        >
           <Image
             src="/assets/icons/stars.svg"
             alt="Generate answer"
@@ -76,7 +117,7 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
             height={12}
             className="object-contain"
           />
-          Generate an AI answer
+          {isLoading ? "Generating Answer..." : "Generate an AI answer"}
         </Button>
       </div>
       <Form {...form}>
@@ -85,7 +126,7 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
             control={form.control}
             name="answer"
             render={({ field }) => (
-              <FormItem className="flex w-full flex-col gap-2">
+              <FormItem className="flex flex-col gap-2 w-full">
                 <FormControl className="mt-3.5">
                   <Editor
                     key={theme}
@@ -113,6 +154,18 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
                         "table",
                         "wordcount",
                       ],
+                      codesample_languages: [
+                        { text: "JavaScript", value: "javascript" },
+                        { text: "TypeScript", value: "typescript" },
+                        { text: "Python", value: "python" },
+                        { text: "HTML", value: "xml" },
+                        { text: "CSS", value: "css" },
+                        { text: "Bash", value: "bash" },
+                        { text: "JSON", value: "json" },
+                        { text: "Plain Text", value: "plaintext" },
+                      ],
+                      valid_elements: "pre[class|style],code[class]",
+                      extended_valid_elements: "pre[class|style],code[class]",
                       toolbar:
                         "undo redo |" +
                         "codesample | bold italic forecolor | alignleft aligncenter " +
@@ -129,10 +182,10 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
             )}
           />
 
-          <div className="mt-8 flex justify-end">
+          <div className="flex justify-end mt-8">
             <Button
               type="submit"
-              className="primary-gradient w-fit py-3 !text-light-900"
+              className="py-3 w-fit !text-light-900 primary-gradient"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Submitting..." : "Submit"}

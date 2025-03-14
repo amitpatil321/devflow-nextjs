@@ -22,19 +22,19 @@ const page = async ({ searchParams }: SearchParamsProps) => {
 
   return (
     <>
-      <div className="flex sm:flex-row flex-col-reverse justify-between sm:items-center gap-4 w-full">
+      <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="text-dark100_light900 h1-bold">All Questions</h1>
         <Link
           href={`${paths.askQuestion}`}
           className="flex justify-end max-sm:w-full"
         >
-          <Button className="px-4 py-3 min-h-[46px] !text-light-900 primary-gradient">
+          <Button className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900">
             Ask a Question
           </Button>
         </Link>
       </div>
 
-      <div className="flex max-sm:flex-col justify-between sm:items-center gap-5 mt-11">
+      <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route={pages.home}
           iconPosition="left"
@@ -47,7 +47,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
 
       <HomeFilters />
 
-      <section className="flex flex-col gap-6 mt-6 w-full">
+      <section className="mt-6 flex w-full flex-col gap-6">
         {questions?.length > 0 ? (
           questions.map((question) => (
             <QuestionCard key={question._id} question={question} />

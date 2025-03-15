@@ -5,7 +5,7 @@ import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import paths from "@/constants/paths";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
-import { getAllUsers } from "@/lib/actions/user.actions";
+import { getAllUsers } from "@/lib/actions/user.action";
 import { UserFilters } from "../../../constants/filters";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
@@ -21,7 +21,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
     <>
       <h1 className="text-dark100_light900 h1-bold">All Users</h1>
 
-      <div className="flex max-sm:flex-col justify-between sm:items-center gap-5 mt-10">
+      <div className="mt-10 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route={paths.community}
           iconPosition="left"
@@ -36,7 +36,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
         />
       </div>
 
-      <section className="flex flex-wrap gap-4 mt-10">
+      <section className="mt-10 flex flex-wrap gap-4">
         {users?.length > 0 ? (
           users.map((user: any) => <UserCard key={user._id} user={user} />)
         ) : (

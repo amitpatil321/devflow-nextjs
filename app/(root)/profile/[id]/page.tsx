@@ -4,7 +4,7 @@ import QuestionTab from "@/components/shared/QuestionTab";
 import Stats from "@/components/shared/Stats";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getUserInfo } from "@/lib/actions/user.actions";
+import { getUserInfo } from "@/lib/actions/user.action";
 import { getJoinedDate } from "@/lib/utils";
 import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
@@ -27,23 +27,23 @@ const page = async ({ params, searchParams }: PageProps) => {
 
   return (
     <>
-      <div className="flex sm:flex-row flex-col-reverse justify-between items-start">
-        <div className="flex lg:flex-row flex-col items-start gap-4 align-top">
+      <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
+        <div className="flex flex-col items-start gap-4 align-top lg:flex-row">
           <Image
             src={user.picture}
             alt="profile picture"
             width={140}
             height={140}
-            className="p-0.5 border-2 border-slate-200 rounded-full object-cover"
+            className="rounded-full border-2 border-slate-200 object-cover p-0.5"
           />
 
           <div className="flex flex-col">
             <h2 className="text-dark100_light900 h2-bold">{user.name}</h2>
-            <p className="mt-1 paragraph-regular text-dark200_light800">
+            <p className="paragraph-regular text-dark200_light800 mt-1">
               @{user.username}
             </p>
 
-            <div className="flex flex-wrap justify-start items-center gap-5 mt-4">
+            <div className="mt-4 flex flex-wrap items-center justify-start gap-5">
               {user.portfolioWebsite && (
                 <ProfileLink
                   imgUrl="/assets/icons/link.svg"
@@ -66,7 +66,7 @@ const page = async ({ params, searchParams }: PageProps) => {
             </div>
 
             {user.bio && (
-              <p className="mt-4 paragraph-regular text-dark400_light800">
+              <p className="paragraph-regular text-dark400_light800 mt-4">
                 {user.bio}
               </p>
             )}
@@ -77,7 +77,7 @@ const page = async ({ params, searchParams }: PageProps) => {
           <SignedIn>
             {clerkId === user.clerkId && (
               <Link href="/profile/edit">
-                <Button className="px-4 py-3 min-w-[175px] paragraph-medium min-h-[46px] text-dark300_light900 btn-secondary">
+                <Button className="paragraph-medium text-dark300_light900 btn-secondary min-h-[46px] min-w-[175px] px-4 py-3">
                   Edit Profile
                 </Button>
               </Link>
@@ -93,9 +93,9 @@ const page = async ({ params, searchParams }: PageProps) => {
         badges={badgeCounts}
       />
 
-      <div className="flex gap-10 mt-10">
+      <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">
-          <TabsList className="p-1 min-h-[42px] background-light800_dark400">
+          <TabsList className="background-light800_dark400 min-h-[42px] p-1">
             <TabsTrigger value="top-posts" className="tab">
               Top Posts
             </TabsTrigger>
@@ -105,7 +105,7 @@ const page = async ({ params, searchParams }: PageProps) => {
           </TabsList>
           <TabsContent
             value="top-posts"
-            className="flex flex-col gap-6 mt-5 w-full"
+            className="mt-5 flex w-full flex-col gap-6"
           >
             <QuestionTab
               searchParams={searchParams}
@@ -113,7 +113,7 @@ const page = async ({ params, searchParams }: PageProps) => {
               clerkId={clerkId}
             />
           </TabsContent>
-          <TabsContent value="answers" className="flex flex-col gap-6 w-full">
+          <TabsContent value="answers" className="flex w-full flex-col gap-6">
             <AnswersTab
               searchParams={searchParams}
               userId={user._id}

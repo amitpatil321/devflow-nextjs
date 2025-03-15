@@ -8,7 +8,7 @@ import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
-import { getUserById } from "@/lib/actions/user.actions";
+import { getUserById } from "@/lib/actions/user.action";
 import { formatNumber, timeAgo } from "@/lib/utils";
 import { TagProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
@@ -59,11 +59,11 @@ const page = async ({ params }: Props) => {
 
   return (
     <>
-      <div className="flex-col flex-start w-full">
-        <div className="flex sm:flex-row flex-col-reverse justify-between sm:items-center gap-5 sm:gap-2 w-full">
+      <div className="flex-start w-full flex-col">
+        <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
           <Link
             href={`/profile/${author.clerkId}`}
-            className="flex justify-start items-center gap-1"
+            className="flex items-center justify-start gap-1"
           >
             <Image
               src={author.picture}
@@ -76,7 +76,7 @@ const page = async ({ params }: Props) => {
               {author.name}
             </p>
           </Link>
-          <div className="flex justify-end small-regular">
+          <div className="small-regular flex justify-end">
             <Votes
               type="question"
               itemId={JSON.stringify(_id)}
@@ -95,12 +95,12 @@ const page = async ({ params }: Props) => {
             />
           </div>
         </div>
-        <h2 className="mt-3.5 w-full text-dark200_light900 text-left h2-semibold">
+        <h2 className="text-dark200_light900 h2-semibold mt-3.5 w-full text-left">
           {title}
         </h2>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mt-5 mb-8">
+      <div className="mb-8 mt-5 flex flex-wrap items-center gap-4">
         <Metric
           imgUrl="/assets/icons/clock.svg"
           alt="asked on"
@@ -127,7 +127,7 @@ const page = async ({ params }: Props) => {
 
       <ParseHTML data={content} />
 
-      <div className="flex flex-wrap gap-2 mt-8">
+      <div className="mt-8 flex flex-wrap gap-2">
         {tags?.map((tag: TagProps) => (
           <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
         ))}

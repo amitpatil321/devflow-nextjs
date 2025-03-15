@@ -1,5 +1,5 @@
 import paths from "@/constants/paths";
-import { getUserQuestions } from "@/lib/actions/user.actions";
+import { getUserQuestions } from "@/lib/actions/user.action";
 import QuestionCard from "../cards/QuestionCard";
 import NoResults from "./NoResults";
 import Pagination from "./Pagination";
@@ -20,7 +20,7 @@ const QuestionTab = async ({
 
   return (
     <>
-      <section className="flex flex-col gap-6 mt-6 w-full">
+      <section className="mt-6 flex w-full flex-col gap-6">
         {userQuestions.length > 0 ? (
           userQuestions.map((question) => (
             <QuestionCard

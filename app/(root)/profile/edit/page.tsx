@@ -1,6 +1,6 @@
 import { Profile } from "@/components/forms/Profile";
 import paths from "@/constants/paths";
-import { getUserById } from "@/lib/actions/user.actions";
+import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 

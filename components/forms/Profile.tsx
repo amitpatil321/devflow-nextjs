@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import paths from "@/constants/paths";
-import { updateProfile } from "@/lib/actions/user.actions";
+import { updateProfile } from "@/lib/actions/user.action";
 import { ProfileValidationSchema } from "@/lib/validations";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -71,7 +71,7 @@ export const Profile = ({ userInfo }: ProfileProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-10 w-full"
+        className="flex w-full flex-col gap-10"
       >
         <FormField
           control={form.control}
@@ -83,7 +83,7 @@ export const Profile = ({ userInfo }: ProfileProps) => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  className="bg-background light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light800_dark300"
+                  className="bg-background light-border-2 paragraph-regular text-dark300_light700 no-focus background-light800_dark300 min-h-[56px]"
                   placeholder="Your Name"
                   {...field}
                 />
@@ -102,7 +102,7 @@ export const Profile = ({ userInfo }: ProfileProps) => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  className="bg-background light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light800_dark300"
+                  className="bg-background light-border-2 paragraph-regular text-dark300_light700 no-focus background-light800_dark300 min-h-[56px]"
                   placeholder="Your Username"
                   {...field}
                 />
@@ -121,7 +121,7 @@ export const Profile = ({ userInfo }: ProfileProps) => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  className="bg-background light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light800_dark300"
+                  className="bg-background light-border-2 paragraph-regular text-dark300_light700 no-focus background-light800_dark300 min-h-[56px]"
                   placeholder="Portfolio Link"
                   {...field}
                 />
@@ -140,7 +140,7 @@ export const Profile = ({ userInfo }: ProfileProps) => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  className="bg-background light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light800_dark300"
+                  className="bg-background light-border-2 paragraph-regular text-dark300_light700 no-focus background-light800_dark300 min-h-[56px]"
                   placeholder="Where are you from?"
                   {...field}
                 />
@@ -171,7 +171,7 @@ export const Profile = ({ userInfo }: ProfileProps) => {
         />
         <div className="flex justify-end">
           <Button
-            className="px-4 py-3 w-fit !text-light-900 primary-gradient"
+            className="primary-gradient w-fit px-4 py-3 !text-light-900"
             type="submit"
             disabled={isSubmitting}
           >

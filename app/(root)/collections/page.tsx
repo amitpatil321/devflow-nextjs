@@ -6,7 +6,7 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import { QuestionFilters } from "@/constants/filters";
 import paths from "@/constants/paths";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
-import { getSavedQuestions } from "@/lib/actions/user.actions";
+import { getSavedQuestions } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs/server";
 
 const page = async ({ searchParams }: SearchParamsProps) => {
@@ -26,7 +26,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
     <>
       <h1 className="text-dark100_light900 h1-bold">Saved Questions</h1>
 
-      <div className="flex max-sm:flex-col justify-between sm:items-center gap-5 mt-11">
+      <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route="/"
           iconPosition="left"
@@ -41,7 +41,7 @@ const page = async ({ searchParams }: SearchParamsProps) => {
         />
       </div>
 
-      <section className="flex flex-col gap-6 mt-6 w-full">
+      <section className="mt-6 flex w-full flex-col gap-6">
         {questions.length > 0 ? (
           questions.map((question) => (
             <QuestionCard key={question._id} question={question} />

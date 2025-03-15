@@ -1,5 +1,5 @@
 import paths from "@/constants/paths";
-import { getUserAnswers } from "@/lib/actions/user.actions";
+import { getUserAnswers } from "@/lib/actions/user.action";
 import AnswerCard from "../cards/AnswerCard";
 import NoResults from "./NoResults";
 import Pagination from "./Pagination";
@@ -22,7 +22,7 @@ const AnswersTab = async ({
 
   return (
     <>
-      <section className="flex flex-col gap-6 mt-6 w-full">
+      <section className="mt-6 flex w-full flex-col gap-6">
         {userAnswers.length > 0 ? (
           userAnswers.map((answer) => (
             <AnswerCard key={answer._id} clerkId={clerkId} answer={answer} />

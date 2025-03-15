@@ -16,19 +16,19 @@ interface ListAnswersProps {
 const ListAnswers = async ({ questionId, loggedUser }: ListAnswersProps) => {
   const allAnswers = await getAllAnswers({ questionId });
   return (
-    <div className="flex flex-col mt-8">
-      <div className="flex justify-between items-center">
+    <div className="mt-8 flex flex-col">
+      <div className="flex items-center justify-between">
         <h3 className="primary-text-gradient">{allAnswers?.length} Answers</h3>
 
         <Filters filters={AnswerFilters} />
       </div>
       {allAnswers?.map(
         ({ _id, author, content, upvotes, downvotes, createdOn }) => (
-          <article key={_id} className="flex flex-col gap-4 mt-8">
-            <div className="flex sm:flex-row flex-col-reverse justify-between sm:items-center gap-5 sm:gap-2 w-full">
+          <article key={_id} className="mt-8 flex flex-col gap-4">
+            <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
               <Link
                 href={`/profile/${author.clerkId}`}
-                className="flex justify-start items-center gap-1"
+                className="flex items-center justify-start gap-1"
               >
                 <Image
                   src={author.picture}
@@ -37,19 +37,19 @@ const ListAnswers = async ({ questionId, loggedUser }: ListAnswersProps) => {
                   height={18}
                   alt="profile"
                 />
-                <div className="flex sm:flex-row flex-col sm:items-center">
-                  <p className="mr-1 text-dark300_light700 body-semibold">
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                  <p className="text-dark300_light700 body-semibold mr-1">
                     {author.name}
                   </p>
-                  <p className="mt-0.5 text-light400_light500 line-clamp-1 small-regular">
+                  <p className="text-light400_light500 small-regular mt-0.5 line-clamp-1">
                     <span className="max-sm:hidden"> • </span>
                     answered {timeAgo(createdOn)}
                   </p>
                 </div>
               </Link>
-              <div className="flex justify-end small-regular">
+              <div className="small-regular flex justify-end">
                 <Votes
-                  type="answer"
+                  type="Answer"
                   itemId={JSON.stringify(_id)}
                   userId={JSON.stringify(loggedUser?._id)}
                   upvotes={upvotes.length}

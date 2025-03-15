@@ -15,7 +15,7 @@ import { formatNumber } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface VotesProps {
-  type: "question" | "answer";
+  type: "Question" | "Answer";
   itemId: string;
   userId: string;
   upvotes: number;
@@ -49,7 +49,7 @@ const Votes = ({
       return toast.info("You must to be logged in to perform this action");
     }
 
-    if (type !== "question" && type !== "answer") return;
+    if (type !== "Question" && type !== "Answer") return;
 
     const params = {
       itemId: JSON.parse(itemId),
@@ -61,22 +61,32 @@ const Votes = ({
 
     try {
       if (action === "upvote") {
-        if (type === "question") await upvoteQuestion(params);
-        if (type === "answer") await upvoteAnswer(params);
+        if (type === "Question") await upvoteQuestion(params);
+        if (type === "Answer") await upvoteAnswer(params);
       }
       if (action === "downvote") {
-        if (type === "question") await downvoteQuestion(params);
-        if (type === "answer") await downvoteAnswer(params);
+        if (type === "Question") await downvoteQuestion(params);
+        if (type === "Answer") await downvoteAnswer(params);
       }
     } catch (error) {
-      toast.error(`Error performing action`);
+      toast.error(
+        `Error ${action === "upvote" ? "upvoting" : "downvoting"} ${type}`,
+      );
       throw error;
     }
 
-    toast.success(
-      `Question ${hasUpvoted ? "Upvoted" : "Downvoted"} successfully`,
-    );
-    return;
+    let message = "";
+    if (action === "upvote") {
+      message = hasUpvoted
+        ? `${type} upvote removed`
+        : `${type} upvoted successfully`;
+    } else if (action === "downvote") {
+      message = hasDownvoted
+        ? `${type} downvote removed`
+        : `${type} downvoted successfully`;
+    }
+
+    toast.success(message);
   };
 
   const handleSave = async () => {
@@ -120,7 +130,7 @@ const Votes = ({
             <p>{formatNumber(downvotes)}</p>
           </div>
         </div>
-        {type === "question" && (
+        {type === "Question" && (
           <div className="flex items-center gap-1">
             <Image
               src={`/assets/icons/${hasSaved ? "star-filled.svg" : "star-red.svg"}`}

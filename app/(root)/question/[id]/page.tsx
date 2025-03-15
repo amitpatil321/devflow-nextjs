@@ -78,7 +78,7 @@ const page = async ({ params }: Props) => {
           </Link>
           <div className="small-regular flex justify-end">
             <Votes
-              type="question"
+              type="Question"
               itemId={JSON.stringify(_id)}
               userId={JSON.stringify(loggedUser?._id)}
               upvotes={upvotes.length}

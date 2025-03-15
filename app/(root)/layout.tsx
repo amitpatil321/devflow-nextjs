@@ -1,21 +1,9 @@
-// import { useSearchParams } from "next/navigation";
-// import React, { useEffect } from "react";
-// import { toast, Toaster } from "sonner";
-
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import NavBar from "@/components/shared/navbar/NavBar";
+import ToasterWrapper from "@/components/toastWrapper";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  // const searchParams = useSearchParams();
-  // const error = searchParams.get("error");
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(decodeURIComponent(error));
-  //   }
-  // }, [error]);
-
   return (
     <main className="background-light850_dark100 relative">
       <NavBar />
@@ -25,7 +13,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="mx-auto w-full max-w-5xl">{children}</div>
         </section>
         <RightSidebar />
-        {/* <Toaster position="top-center" richColors theme="light" /> */}
+        <ToasterWrapper richColors />
       </div>
     </main>
   );

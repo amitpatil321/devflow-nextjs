@@ -5,13 +5,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
-import { viewQuestion } from "@/lib/actions/interaction.actions";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
-import { toggeSaveQuestion } from "@/lib/actions/user.actions";
+import { toggeSaveQuestion } from "@/lib/actions/user.action";
 import { formatNumber } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface VotesProps {
   type: "question" | "answer";
@@ -44,7 +45,9 @@ const Votes = ({
   }, [itemId, userId, pathname, router]);
 
   const handleVote = async (action: "upvote" | "downvote") => {
-    if (!userId) return;
+    if (!userId) {
+      return toast.info("You must to be logged in to perform this action");
+    }
 
     if (type !== "question" && type !== "answer") return;
 
@@ -66,15 +69,21 @@ const Votes = ({
         if (type === "answer") await downvoteAnswer(params);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(`Error performing action`);
       throw error;
     }
 
-    // Todo: show toast message
+    toast.success(
+      `Question ${hasUpvoted ? "Upvoted" : "Downvoted"} successfully`,
+    );
     return;
   };
 
   const handleSave = async () => {
+    if (!userId) {
+      return toast.info("You must to be logged in to perform this action");
+    }
+
     await toggeSaveQuestion({
       userId: JSON.parse(userId),
       itemId: JSON.parse(itemId),
@@ -84,7 +93,7 @@ const Votes = ({
 
   return (
     <div className="flex gap-5">
-      <div className="flex flex-end gap-4">
+      <div className="flex-end flex gap-4">
         <div className="flex items-center gap-1">
           <Image
             src={`/assets/icons/${hasUpvoted ? "upvoted.svg" : "upvote.svg"}`}
@@ -94,7 +103,7 @@ const Votes = ({
             className="cursor-pointer"
             onClick={() => handleVote("upvote")}
           />
-          <div className="flex-center p-1 rounded-sm min-w-[18px] background-light700_dark400">
+          <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
             <p>{formatNumber(upvotes)}</p>
           </div>
         </div>
@@ -107,7 +116,7 @@ const Votes = ({
             className="cursor-pointer"
             onClick={() => handleVote("downvote")}
           />
-          <div className="flex-center p-1 rounded-sm min-w-[18px] background-light700_dark400">
+          <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
             <p>{formatNumber(downvotes)}</p>
           </div>
         </div>

@@ -10,6 +10,13 @@ const config: Config = {
     "./app/**/*.{ts,tsx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
         primary: {
@@ -49,6 +56,11 @@ const config: Config = {
         "light-300": "-10px 10px 20px 0px rgba(218, 213, 213, 0.10)",
         "dark-100": "0px 2px 10px 0px rgba(46, 52, 56, 0.10)",
         "dark-200": "2px 0px 20px 0px rgba(39, 36, 36, 0.04)",
+      },
+      backgroundImage: {
+        // bg images for login and signup screens
+        "auth-dark": "url('/assets/images/auth-dark.png')",
+        "auth-light": "url('/assets/images/auth-light.png')",
       },
       screens: {
         xs: "420px",

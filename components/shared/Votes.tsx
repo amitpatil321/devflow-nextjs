@@ -10,8 +10,8 @@ import {
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
-import { toggeSaveQuestion } from "@/lib/actions/user.action";
-import { formatNumber } from "@/lib/utils";
+import { toggleSaveQuestion } from "@/lib/actions/user.action";
+import { formatNumber, requestLogin } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface VotesProps {
@@ -45,9 +45,7 @@ const Votes = ({
   }, [itemId, userId, pathname, router]);
 
   const handleVote = async (action: "upvote" | "downvote") => {
-    if (!userId) {
-      return toast.info("You must to be logged in to perform this action");
-    }
+    if (!userId) return requestLogin();
 
     if (type !== "Question" && type !== "Answer") return;
 
@@ -90,11 +88,9 @@ const Votes = ({
   };
 
   const handleSave = async () => {
-    if (!userId) {
-      return toast.info("You must to be logged in to perform this action");
-    }
+    if (!userId) return requestLogin();
 
-    await toggeSaveQuestion({
+    await toggleSaveQuestion({
       userId: JSON.parse(userId),
       itemId: JSON.parse(itemId),
       path: pathname,

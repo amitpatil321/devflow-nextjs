@@ -19,6 +19,7 @@ import { updateProfile } from "@/lib/actions/user.action";
 import { ProfileValidationSchema } from "@/lib/validations";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
 
 interface ProfileProps {
@@ -57,11 +58,12 @@ export const Profile = ({ userInfo }: ProfileProps) => {
         path: `${paths.profile}/${clerkId}`,
       });
 
+      toast.success("Profile updated successfully");
+
       router.back();
-      //   redirect(`${paths.profile}/${clerkId}`);
-    } catch (err: any) {
-      console.log(err);
-      throw new Error("Error updating profile");
+    } catch (error: any) {
+      toast.error("Error updating profile");
+      throw new Error("Error updating profile", error);
     } finally {
       setIsSubmitting(false);
     }

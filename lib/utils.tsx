@@ -1,11 +1,24 @@
 import { BADGE_CRITERIA } from "@/constants";
+import paths from "@/constants/paths";
 import { BadgeCounts } from "@/types";
 import { clsx, type ClassValue } from "clsx";
+import Link from "next/link";
 import queryString from "query-string";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function requestLogin() {
+  return toast.info("You must be logged in to perform this action", {
+    description: () => (
+      <Link href={paths.signIn} className="text-blue-500 underline">
+        <b>Login now</b>
+      </Link>
+    ),
+  });
 }
 
 export const timeAgo = (createdAt: Date): string => {

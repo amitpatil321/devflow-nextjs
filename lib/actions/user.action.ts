@@ -138,7 +138,7 @@ export async function getUserById(params: GetUserProps) {
   }
 }
 
-export async function toggeSaveQuestion(params: ToggleSaveQuestionProps) {
+export async function toggleSaveQuestion(params: ToggleSaveQuestionProps) {
   try {
     connectToDatabase();
     const { userId, itemId, path } = params;

@@ -3,6 +3,7 @@
 import { CHATGPT } from "@/constants";
 import { useTheme } from "@/context/ThemeProvider";
 import { createAnswer } from "@/lib/actions/answer.action";
+import { requestLogin } from "@/lib/utils";
 import { AnswerScheme } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tinymce/tinymce-react";
@@ -10,6 +11,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import {
@@ -41,6 +43,9 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
 
   const onSubmit = async (data: z.infer<typeof AnswerScheme>) => {
     const { answer } = data;
+
+    if (!authorId) return requestLogin();
+
     try {
       setIsSubmitting(true);
       await createAnswer({
@@ -56,8 +61,10 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
         const editor = editorRef?.current as any;
         editor.setContent("");
       }
+
+      return toast.success("Answer submitted successfully");
     } catch (error) {
-      console.log(error);
+      toast.error("Error submitting answer");
       throw error;
     } finally {
       setIsSubmitting(false);
@@ -102,12 +109,12 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
 
   return (
     <div>
-      <div className="flex sm:flex-row flex-col justify-between sm:items-center gap-5 sm:gap-2 mb-3">
+      <div className="mb-3 flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="paragraph-semibold text-dark400_light800">
           Write your answer here
         </h4>
         <Button
-          className="gap-1.5 shadow-none px-4 light-border-2 rounded-md text-primary-500 btn dark:"
+          className="light-border-2 btn dark: gap-1.5 rounded-md px-4 text-primary-500 shadow-none"
           onClick={() => generateAIAnswer()}
         >
           <Image
@@ -126,7 +133,7 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
             control={form.control}
             name="answer"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2 w-full">
+              <FormItem className="flex w-full flex-col gap-2">
                 <FormControl className="mt-3.5">
                   <Editor
                     key={theme}
@@ -182,10 +189,10 @@ const Answer = ({ question, questionId, authorId }: AnswerProps) => {
             )}
           />
 
-          <div className="flex justify-end mt-8">
+          <div className="mt-8 flex justify-end">
             <Button
               type="submit"
-              className="py-3 w-fit !text-light-900 primary-gradient"
+              className="primary-gradient w-fit py-3 !text-light-900"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Submitting..." : "Submit"}

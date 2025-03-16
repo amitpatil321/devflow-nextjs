@@ -55,7 +55,7 @@ export interface TopInteractedTags {
 }
 export interface GetTagById {
   tagId: string;
-  page: string | null;
+  page?: string | null;
 }
 export interface GetQuestionDetailsProps {
   questionId: string;

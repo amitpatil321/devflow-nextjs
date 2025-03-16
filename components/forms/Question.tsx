@@ -22,6 +22,7 @@ import { useTheme } from "@/context/ThemeProvider";
 import { createQuestion, updateQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { Badge } from "../ui/badge";
 
 interface props {
@@ -64,6 +65,7 @@ const Question = ({ type, userId, questionDetails }: props) => {
           content: explanation,
           path: pathname,
         });
+        toast.success("Question updated successfully");
         router.push(`${paths.question}/${_id}`);
       } else {
         await createQuestion({
@@ -73,10 +75,11 @@ const Question = ({ type, userId, questionDetails }: props) => {
           author: JSON.parse(userId.toString()),
           path: pathname,
         });
+        toast.success("Question saved successfully");
         router.push(paths.home);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Operation failed, Please try again!");
       throw error;
     } finally {
       setSubmitting(false);
@@ -126,24 +129,24 @@ const Question = ({ type, userId, questionDetails }: props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-10 w-full"
+        className="flex w-full flex-col gap-10"
       >
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 w-full">
+            <FormItem className="flex w-full flex-col gap-2">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Question Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  className="light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light700_dark300"
+                  className="light-border-2 paragraph-regular text-dark300_light700 no-focus background-light700_dark300 min-h-[56px]"
                   placeholder="Question Title"
                   {...field}
                 />
               </FormControl>
-              <FormDescription className="mt-2.5 text-light-500 body-regular">
+              <FormDescription className="body-regular mt-2.5 text-light-500">
                 Be specific and imagine you&apos;re asking question to another
                 person.
               </FormDescription>
@@ -155,7 +158,7 @@ const Question = ({ type, userId, questionDetails }: props) => {
           control={form.control}
           name="explanation"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 w-full">
+            <FormItem className="flex w-full flex-col gap-2">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Explanation <span className="text-primary-500">*</span>
               </FormLabel>
@@ -197,7 +200,7 @@ const Question = ({ type, userId, questionDetails }: props) => {
                   // {...field}
                 />
               </FormControl>
-              <FormDescription className="mt-2.5 text-light-500 body-regular">
+              <FormDescription className="body-regular mt-2.5 text-light-500">
                 Introduce the problem and expand on what you put in the title,
                 Minumum 20 characters. person.
               </FormDescription>
@@ -209,14 +212,14 @@ const Question = ({ type, userId, questionDetails }: props) => {
           control={form.control}
           name="tags"
           render={({ field }) => (
-            <FormItem className="flex flex-col gap-2 w-full">
+            <FormItem className="flex w-full flex-col gap-2">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Tags <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl className="mt-3.5">
                 <>
                   <Input
-                    className="light-border-2 paragraph-regular min-h-[56px] text-dark300_light700 no-focus background-light700_dark300"
+                    className="light-border-2 paragraph-regular text-dark300_light700 no-focus background-light700_dark300 min-h-[56px]"
                     placeholder="Add tags..."
                     disabled={type === "edit"}
                     onKeyDown={(event) => handleTagInput(event, field)}
@@ -229,7 +232,7 @@ const Question = ({ type, userId, questionDetails }: props) => {
                   />
                 </>
               </FormControl>
-              <FormDescription className="mt-2.5 text-light-500 body-regular">
+              <FormDescription className="body-regular mt-2.5 text-light-500">
                 Add upto 3 tags to describe what your question is about. You
                 need to press enter to add a tag.
               </FormDescription>
@@ -238,7 +241,7 @@ const Question = ({ type, userId, questionDetails }: props) => {
           )}
         />
         <Button
-          className="px-4 py-3 w-fit !text-light-900 primary-gradient"
+          className="primary-gradient w-fit px-4 py-3 !text-light-900"
           type="submit"
           disabled={isSubmitting}
         >
@@ -269,7 +272,7 @@ const RenderTags = ({
       {field.value.map((tag) => (
         <Badge
           key={tag}
-          className="flex justify-center gap-2 item-center px-4 py-2 border-none rounded-md text-light400_light500 capitalize subtle-medium background-light800_dark300"
+          className="item-center text-light400_light500 subtle-medium background-light800_dark300 flex justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
           onClick={() => handleRemoveTags(tag, field)}
         >
           {tag}
@@ -279,7 +282,7 @@ const RenderTags = ({
               alt="Close Icon"
               width={12}
               height={12}
-              className="dark:invert invert-0 object-contain cursor-pointer"
+              className="cursor-pointer object-contain invert-0 dark:invert"
             />
           )}
         </Badge>

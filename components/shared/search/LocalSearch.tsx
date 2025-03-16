@@ -33,7 +33,7 @@ const LocalSearch = ({
   }, [searchTerm, router]);
 
   return (
-    <div className="flex flex-row items-center bg-light bg-light-800 dark:bg-dark-400 px-4 py-2 rounded-xl w-full min-h-[56px] grow">
+    <div className="bg-light flex min-h-[56px] w-full grow flex-row items-center rounded-xl bg-light-800 px-4 py-2 dark:bg-dark-400">
       {iconPosition === "left" && (
         <Image
           src={imgSrc}
@@ -47,7 +47,7 @@ const LocalSearch = ({
         type="text"
         value={searchTerm}
         placeholder={placeholder}
-        className={`no-focus placeholder paragraph-regular border-none bg-transparent text-[16px] shadow-none outline-none dark:border-none dark:bg-dark-400 ${otherClasses}`}
+        className="paragraph-regular text-dark400_light700 no-focus placeholder border-none bg-transparent shadow-none outline-none"
         onChange={(event) => {
           if (event.target.value !== searchTerm) {
             router.push(removeKeys(["page"]), { scroll: false });

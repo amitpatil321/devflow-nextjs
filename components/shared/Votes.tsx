@@ -110,7 +110,9 @@ const Votes = ({
             onClick={() => handleVote("upvote")}
           />
           <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-            <p>{formatNumber(upvotes)}</p>
+            <p className="text-dark400_light900 subtle-medium">
+              {formatNumber(upvotes)}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -123,7 +125,9 @@ const Votes = ({
             onClick={() => handleVote("downvote")}
           />
           <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
-            <p>{formatNumber(downvotes)}</p>
+            <p className="text-dark400_light900 subtle-medium">
+              {formatNumber(downvotes)}
+            </p>
           </div>
         </div>
         {type === "Question" && (

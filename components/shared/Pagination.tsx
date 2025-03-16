@@ -45,8 +45,8 @@ const Pagination = ({ total }: Props) => {
             aria-disabled={currentPage <= 1}
             className={
               currentPage <= 1
-                ? "pointer-events-none text-gray-400"
-                : "cursor-pointer"
+                ? "pointer-events-none text-gray-400 dark:text-gray-700"
+                : "cursor-pointer text-slate-950 dark:text-slate-50"
             }
             onClick={() => handlePageChange(currentPage - 1)}
           >
@@ -57,7 +57,7 @@ const Pagination = ({ total }: Props) => {
               <PaginationItem key={page} onClick={() => handlePageChange(page)}>
                 <PaginationLink
                   isActive={currentPage === page}
-                  className={`btn ${+currentPage === page ? "primary-gradient !text-light-900" : ""} cursor-pointer border-none`}
+                  className={`btn text-slate-950 dark:text-slate-50 ${+currentPage === page ? "primary-gradient !text-light-900" : ""} cursor-pointer border-none`}
                 >
                   {page}
                 </PaginationLink>
@@ -68,8 +68,8 @@ const Pagination = ({ total }: Props) => {
             aria-disabled={currentPage == totalPages}
             className={
               currentPage == totalPages
-                ? "pointer-events-none text-gray-300"
-                : "cursor-pointer"
+                ? "pointer-events-none text-gray-400 dark:text-gray-700"
+                : "cursor-pointer text-slate-950 dark:text-slate-50"
             }
             onClick={() => handlePageChange(currentPage + 1)}
           >

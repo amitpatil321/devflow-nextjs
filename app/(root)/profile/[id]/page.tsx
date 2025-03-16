@@ -8,6 +8,7 @@ import { getUserInfo } from "@/lib/actions/user.action";
 import { getJoinedDate } from "@/lib/utils";
 import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,6 +18,10 @@ interface PageProps {
   };
   searchParams: { [key: string]: string | null };
 }
+
+export const metadata: Metadata = {
+  title: "Profile | Dev Overflow",
+};
 
 const page = async ({ params, searchParams }: PageProps) => {
   const { userId: clerkId } = auth();

@@ -8,6 +8,11 @@ import paths from "@/constants/paths";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
 import { getSavedQuestions } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs/server";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Collections | Dev Overflow",
+};
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const { userId } = auth();

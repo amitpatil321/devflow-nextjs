@@ -3,6 +3,7 @@ import paths from "@/constants/paths";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 interface Props {
@@ -10,6 +11,10 @@ interface Props {
     id: string;
   };
 }
+
+export const metadata: Metadata = {
+  title: "Edit question | Dev Overflow",
+};
 
 const page = async ({ params }: Props) => {
   const { userId } = await auth();

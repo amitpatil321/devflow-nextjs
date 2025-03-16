@@ -6,7 +6,12 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import paths from "@/constants/paths";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
 import { getAllUsers } from "@/lib/actions/user.action";
+import type { Metadata } from "next";
 import { UserFilters } from "../../../constants/filters";
+
+export const metadata: Metadata = {
+  title: "Community | Dev Overflow",
+};
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const { q, filter, page } = searchParams;

@@ -33,6 +33,20 @@ interface QuestionType {
   createdAt: Date;
 }
 
+interface Params {
+  params: { id: string };
+  searchParams?: Record<string, string>;
+}
+
+export async function generateMetadata({ params }: Params) {
+  const question = (await getQuestionById({
+    questionId: params.id,
+  })) as unknown as QuestionType;
+  return {
+    title: `${question.title} | Dev Overflow`,
+  };
+}
+
 const page = async ({ params }: Props) => {
   const { userId } = await auth();
 

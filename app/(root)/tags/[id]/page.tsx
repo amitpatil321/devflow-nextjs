@@ -14,6 +14,19 @@ interface TagProps {
   };
 }
 
+interface Params {
+  params: { id: string };
+}
+
+export async function generateMetadata({ params }: Params) {
+  const { response } = await questionsBytagId({
+    tagId: params.id,
+  });
+  return {
+    title: `${response.name} | Dev Overflow`,
+  };
+}
+
 const page = async ({ params, searchParams }: TagProps) => {
   const { page } = searchParams;
   const { response, total } = await questionsBytagId({
@@ -35,7 +48,7 @@ const page = async ({ params, searchParams }: TagProps) => {
         />
       </div>
 
-      <section className="flex flex-col gap-6 mt-6 w-full">
+      <section className="mt-6 flex w-full flex-col gap-6">
         {response.questions.length > 0 ? (
           response.questions.map((question: any) => (
             <QuestionCard key={question._id} question={question} />

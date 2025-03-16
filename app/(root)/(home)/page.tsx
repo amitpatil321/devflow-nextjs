@@ -9,8 +9,13 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/lib/actions/shared.types";
+import type { Metadata } from "next";
 import { HomePageFilters } from "../../../constants/filters";
 import { default as pages, default as paths } from "../../../constants/paths";
+
+export const metadata: Metadata = {
+  title: "Home | Dev Overflow",
+};
 
 const page = async ({ searchParams }: SearchParamsProps) => {
   const { q, filter, page } = searchParams;

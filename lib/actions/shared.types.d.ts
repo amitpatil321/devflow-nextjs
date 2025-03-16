@@ -110,12 +110,12 @@ export interface UserInfoProps {
 
 export interface UserQuestionsProps {
   userId: string;
-  page: string | null;
+  page?: string | null;
 }
 
 export interface UserAnswersProps {
   userId: string;
-  page: string | null;
+  page?: string | null;
 }
 
 export interface DeleteQuestionProps {
@@ -146,10 +146,17 @@ export interface SearchParamsProps {
 export interface GetAllTagsProps {
   searchQuery: string | null;
   filter: string | null;
-  page: string | null;
+  page?: string | null;
 }
 
 export interface GlobalSearchProps {
   query: string | null;
   type: string | null;
+}
+
+export interface RecommendedParams {
+  userId: string;
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string | null;
 }

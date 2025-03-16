@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useContext } from "react";
 import {
   Menubar,
   MenubarContent,
@@ -8,15 +7,15 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import Image from "next/image";
 import { themes } from "@/constants";
 import { useTheme } from "@/context/ThemeProvider";
+import Image from "next/image";
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <Menubar className="bg-white border-none bg-transparent shadow-none">
+    <Menubar className="border-none bg-transparent shadow-none">
       <MenubarMenu>
         <MenubarTrigger className="focus:bg-light-900 data-[state=open]:bg-light-900 dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200">
           {theme === "light" ? (
@@ -37,11 +36,11 @@ const ThemeSwitcher = () => {
             />
           )}
         </MenubarTrigger>
-        <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 border-none bg-light-900 dark:bg-dark-100 border-dark-400">
+        <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border border-none border-dark-400 bg-light-900 py-2 dark:bg-dark-100">
           {themes?.map((each) => (
             <MenubarItem
               key={each.value}
-              className="cursor-pointer flex px-2.5 py-2 dark:focus:bg-dark-400"
+              className="flex cursor-pointer px-2.5 py-2 dark:focus:bg-dark-400"
               onClick={() => {
                 setTheme(each.value);
               }}
@@ -54,7 +53,7 @@ const ThemeSwitcher = () => {
                 className={`mr-3 ${theme === each.value && "active-theme"}`}
               />
               <p
-                className={`font-bold text-[14px] ${
+                className={`text-[14px] font-bold ${
                   theme === each.value
                     ? "text-primary-500"
                     : "text-dark-100 dark:text-light-900"

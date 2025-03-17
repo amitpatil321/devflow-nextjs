@@ -2,7 +2,6 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import paths from "./constants/paths";
 
 const isProtectedRoute = createRouteMatcher([
-  `${paths.profile}(.*)`,
   `${paths.askQuestion}(.*)`,
   `${paths.collections}(.*)`,
 ]);

@@ -7,6 +7,8 @@ export const themes = [
   { value: "system", label: "System", icon: "/assets/icons/computer.svg" },
 ];
 
+export const jobSearchApi = "https://jsearch.p.rapidapi.com/search";
+
 export const ItemsPerPage = 10;
 
 export const sidebarLinks: SidebarLink[] = [

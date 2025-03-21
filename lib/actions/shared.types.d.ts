@@ -160,3 +160,9 @@ export interface RecommendedParams {
   pageSize?: number;
   searchQuery?: string | null;
 }
+
+export interface JobSearchProps {
+  filter: string;
+  q: string;
+  page?: number;
+}
